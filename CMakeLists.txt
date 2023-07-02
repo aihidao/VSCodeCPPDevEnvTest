@@ -29,10 +29,10 @@ link_directories(${SDL2_LINK_DIR})
 #生成的可执行文件放入 bin文件中
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
-target_link_libraries(helloSLAM SDL2)
 #增加一个可执行的二进制
 add_executable(helloSLAM main.cpp)
 
+target_link_libraries(helloSLAM SDL2)
 
 
 #移动res文件夹 到 bin/res
