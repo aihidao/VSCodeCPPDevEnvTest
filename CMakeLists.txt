@@ -8,7 +8,9 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # Windows 系统
     message("当前系统是 Windows")
     SET(SDL2_INCLUDE_DIR "D:\\env\\SDL2\\SDL2-2.26.5\\include")
-    SET(SDL2_LINK_DIR "D:\\env\\SDL2\\SDL2-2.26.5\\lib\\x64")
+    SET(SDL2_LINK_DIR "D:\\env\\SDL2\\SDL2-2.26.5\\lib\\x86")
+    #拷贝 lib中的 SDL2.dll 到 bin中
+    file(COPY ${SDL2_LINK_DIR}/SDL2.dll DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     # Mac 系统
     message("当前系统是 Mac")
@@ -31,10 +33,10 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 #增加一个可执行的二进制
 add_executable(helloSLAM main.cpp)
-
+target_link_libraries(helloSLAM SDL2main)
 target_link_libraries(helloSLAM SDL2)
-
 
 #移动res文件夹 到 bin/res
 file(COPY ${PROJECT_SOURCE_DIR}/res DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+
 
