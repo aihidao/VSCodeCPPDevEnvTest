@@ -12,6 +12,8 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     # Mac 系统
     message("当前系统是 Mac")
+    SET(SDL2_INCLUDE_DIR "/opt/homebrew/Cellar/sdl2/2.28.0/include/SDL2")
+    SET(SDL2_LINK_DIR "/opt/homebrew/Cellar/sdl2/2.28.0/lib")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     # Linux 系统
     message("当前系统是 Linux")
