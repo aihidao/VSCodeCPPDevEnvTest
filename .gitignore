@@ -1,3 +1,4 @@
 #排除build 和 bin文件夹和他们的子文件夹
 build/*
 bin/
+.DS_Store
