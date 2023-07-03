@@ -24,6 +24,12 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     message("当前系统是 Mac")
     SET(SDL2_INCLUDE_DIR "/opt/homebrew/Cellar/sdl2/2.28.0/include/SDL2")
     SET(SDL2_LINK_DIR "/opt/homebrew/Cellar/sdl2/2.28.0/lib")
+    
+    SET(SDL2_IMG_INCLUDE_DIR "/opt/homebrew/Cellar/sdl2_image/2.6.3_1/include/SDL2")
+    SET(SDL2_IMG_LINK_DIR "/opt/homebrew/Cellar/sdl2_image/2.6.3_1/lib")
+
+    SET(SDL2_TTF_INCLUDE_DIR "/opt/homebrew/Cellar/sdl2_ttf/2.20.2/include/SDL2")
+    SET(SDL2_TTF_LINK_DIR "/opt/homebrew/Cellar/sdl2_ttf/2.20.2/lib")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     # Linux 系统
     message("当前系统是 Linux")
@@ -38,7 +44,6 @@ include_directories(${SDL2_IMG_INCLUDE_DIR})
 include_directories(${SDL2_TTF_INCLUDE_DIR})
 
 include_directories(include)
-
 
 link_directories(${SDL2_LINK_DIR})
 link_directories(${SDL2_IMG_LINK_DIR})
@@ -55,9 +60,6 @@ target_link_libraries(helloSLAM SDL2main)
 target_link_libraries(helloSLAM SDL2)
 target_link_libraries(helloSLAM SDL2_image)
 target_link_libraries(helloSLAM SDL2_ttf)
-
-
-
 
 #移动res文件夹 到 bin/res
 file(COPY ${PROJECT_SOURCE_DIR}/res DESTINATION ${EXECUTABLE_OUTPUT_PATH})
