@@ -4,7 +4,10 @@
             "name": "Win32",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:\\env\\SDL2\\SDL2-2.26.5\\include"
+                "D:/env/SDL2/SDL2-2.26.5/include/**",
+                "D:/env/SDL2/SDL2_ttf-2.20.2/include/**",
+                "D:/env/SDL2/SDL2_image-2.6.3/include/**",
+                "${workspaceFolder}/include/**"
             ],
             "defines": [
                 "_DEBUG",
@@ -21,6 +24,7 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
+                "${workspaceFolder}/include/**",
                 "/opt/homebrew/Cellar/sdl2/2.28.0/include/SDL2"
             ],
             "defines": [
