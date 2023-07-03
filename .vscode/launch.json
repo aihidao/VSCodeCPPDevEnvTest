@@ -13,6 +13,19 @@
         "externalConsole": true,
         "MIMode": "gdb",
         "miDebuggerPath": "D:/Program Files/MinGW/bin/gdb.exe"
+      },
+      {
+        "name": "Debug - macos",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/bin/helloSLAM",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": true,
+        "MIMode": "lldb"
+        //"miDebuggerPath": "/usr/bin/lldb"
       }
     ]
   }
