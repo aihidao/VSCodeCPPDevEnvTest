@@ -1,5 +1,6 @@
 #pragma once
 #include <SDL.h>
+#include "SDL_FontCache.h"
 #include <SDL_image.h>
 
 static int SCREEN_WIDTH = 800;
@@ -11,6 +12,11 @@ private:
 
     //The window renderer
     SDL_Renderer* mRenderer = NULL;
+
+    //TTF_Font* font = NULL;
+    FC_Font* font = NULL;
+
+    int frameCount = 0;
 
 public:
 

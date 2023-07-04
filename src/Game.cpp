@@ -51,13 +51,19 @@ void Game::updateDraw() {
 	//Clear screen
 	SDL_RenderClear(mRenderer);
 
+	FC_Draw(font, mRenderer, 0, 0, "Hello, world!");
+	FC_Draw(font, mRenderer, 0, 50, "你好，世界!");
+	FC_Draw(font, mRenderer, 0, 150, "Hello, world%d!", frameCount);
 	//Update screen
 	SDL_RenderPresent(mRenderer);
-
 }
 
 void Game::calculateFps() {
-	//frameCount++;
+	frameCount++;
+	if(frameCount > 1000){
+		frameCount = 0;
+	}
+	
 }
 
 //void Game::setTimmers() {
@@ -163,7 +169,14 @@ bool Game::loadMedias()
 	//	printf("Failed to load texture res/test.png!\n");
 	//	success = false;
 	//}
-
+	//font = FC_CreateFont();
+	//FC_LoadFont("res/font.ttf", mRenderer, "", SDL_Color(255, 255, 255, 255), TTF_STYLE_NORMAL);
+	font = FC_CreateFont();
+	#ifdef SDL_GPU_VERSION_MAJOR
+		FC_LoadFont(font, "res/SmileySans-Oblique.ttf", 20, FC_MakeColor(0,0,0,255), TTF_STYLE_NORMAL);
+	#else
+		FC_LoadFont(font, mRenderer, "res/SmileySans-Oblique.ttf", 20, FC_MakeColor(255,0,0,255), TTF_STYLE_NORMAL);
+	#endif
 	return success;
 }
 

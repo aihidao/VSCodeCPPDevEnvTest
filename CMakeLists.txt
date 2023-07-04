@@ -44,12 +44,14 @@ include_directories(${SDL2_IMG_INCLUDE_DIR})
 include_directories(${SDL2_TTF_INCLUDE_DIR})
 
 include_directories(include)
+include_directories(include/basic)
 
 link_directories(${SDL2_LINK_DIR})
 link_directories(${SDL2_IMG_LINK_DIR})
 link_directories(${SDL2_TTF_LINK_DIR})
 
 aux_source_directory(src SOURCE_FILES)
+aux_source_directory(src/basic SOURCE_FILES)
 
 #生成的可执行文件放入 bin文件中
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
