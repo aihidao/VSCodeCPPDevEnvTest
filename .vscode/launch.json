@@ -12,7 +12,8 @@
         "environment": [],
         "externalConsole": true,
         "MIMode": "gdb",
-        "miDebuggerPath": "D:/Program Files/MinGW/bin/gdb.exe"
+        "miDebuggerPath": "D:/Program Files/MinGW/bin/gdb.exe",
+        "preLaunchTask": "make - windows"
       },
       {
         "name": "Debug - macos",
