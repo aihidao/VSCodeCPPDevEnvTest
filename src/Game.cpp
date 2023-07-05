@@ -12,8 +12,6 @@ void Game::update() {
 	//Main loop flag
 	bool quit = false;
 
-
-
 	//Event handler
 	SDL_Event e;
 
@@ -51,18 +49,17 @@ void Game::updateDraw() {
 	//Clear screen
 	SDL_RenderClear(mRenderer);
 
-	FC_Draw(font, mRenderer, 0, 0, "Hello, world!");
-	FC_Draw(font, mRenderer, 0, 50, "你好，世界!");
-	FC_Draw(font, mRenderer, 0, 150, "Hello, world%d!", frameCount);
+	mDebugInfoBox->draw();
+
 	//Update screen
 	SDL_RenderPresent(mRenderer);
 }
 
 void Game::calculateFps() {
-	frameCount++;
-	if(frameCount > 1000){
-		frameCount = 0;
-	}
+	//frameCount++;
+	// if(frameCount > 1000){
+	// 	frameCount = 0;
+	// }
 	
 }
 
@@ -79,7 +76,7 @@ bool Game::start() {
 	else
 	{
 		//Load media
-		if (!loadMedias())
+		if (!loadWidget())
 		{
 			printf("Failed to load media!\n");
 		}
@@ -158,30 +155,22 @@ bool Game::init()
 	return success;
 }
 
-bool Game::loadMedias()
+bool Game::loadWidget()
 {
 	//Loading success flag
 	bool success = true;
-
-	//mGameTexture = new GameTexture(mRenderer, "res/test.png");
-	//if (mGameTexture == NULL)
-	//{
-	//	printf("Failed to load texture res/test.png!\n");
-	//	success = false;
-	//}
-	//font = FC_CreateFont();
-	//FC_LoadFont("res/font.ttf", mRenderer, "", SDL_Color(255, 255, 255, 255), TTF_STYLE_NORMAL);
-	font = FC_CreateFont();
-	#ifdef SDL_GPU_VERSION_MAJOR
-		FC_LoadFont(font, "res/SmileySans-Oblique.ttf", 20, FC_MakeColor(0,0,0,255), TTF_STYLE_NORMAL);
-	#else
-		FC_LoadFont(font, mRenderer, "res/SmileySans-Oblique.ttf", 20, FC_MakeColor(255,0,0,255), TTF_STYLE_NORMAL);
-	#endif
+	mDebugInfoBox = new DebugInfoBox(mRenderer);
+	testText = new Text("test");
+	mDebugInfoBox->push(*testText);
+	//mTextRender = new TextRender(mRenderer);
 	return success;
 }
 
 void Game::close()
 {
+	//delete mTextRender;
+	delete mDebugInfoBox;
+	delete testText;
 	//Destroy window	
 	SDL_DestroyRenderer(mRenderer);
 	SDL_DestroyWindow(mWindow);

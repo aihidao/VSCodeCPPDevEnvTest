@@ -1,7 +1,10 @@
-#pragma once
+#ifndef __GAME__H__
+#define __GAME__H__
 #include <SDL.h>
 #include "SDL_FontCache.h"
 #include <SDL_image.h>
+#include "TextRender.h"
+#include "DebugInfoBox.h"
 
 static int SCREEN_WIDTH = 800;
 static int SCREEN_HEIGHT = 800;
@@ -13,10 +16,11 @@ private:
     //The window renderer
     SDL_Renderer* mRenderer = NULL;
 
-    //TTF_Font* font = NULL;
-    FC_Font* font = NULL;
+    //TextRender
+    //TextRender* mTextRender = NULL;
 
-    int frameCount = 0;
+    DebugInfoBox* mDebugInfoBox = NULL;
+    Text* testText = NULL;
 
 public:
 
@@ -25,7 +29,7 @@ public:
     bool init();
 
     //Loads media
-    bool loadMedias();
+    bool loadWidget();
 
 
     void update();
@@ -41,3 +45,4 @@ public:
     //Frees media and shuts down SDL
     void close();
 };
+#endif

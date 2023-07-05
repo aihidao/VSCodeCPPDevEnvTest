@@ -45,6 +45,8 @@ include_directories(${SDL2_TTF_INCLUDE_DIR})
 
 include_directories(include)
 include_directories(include/basic)
+include_directories(include/ui)
+include_directories(include/widget)
 
 link_directories(${SDL2_LINK_DIR})
 link_directories(${SDL2_IMG_LINK_DIR})
@@ -52,6 +54,8 @@ link_directories(${SDL2_TTF_LINK_DIR})
 
 aux_source_directory(src SOURCE_FILES)
 aux_source_directory(src/basic SOURCE_FILES)
+aux_source_directory(src/ui SOURCE_FILES)
+aux_source_directory(src/widget SOURCE_FILES)
 
 #生成的可执行文件放入 bin文件中
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -64,6 +68,6 @@ target_link_libraries(helloSLAM SDL2_image)
 target_link_libraries(helloSLAM SDL2_ttf)
 
 #移动res文件夹 到 bin/res
-file(COPY ${PROJECT_SOURCE_DIR}/res DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+file(COPY ${PROJECT_SOURCE_DIR}/assets DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
 
