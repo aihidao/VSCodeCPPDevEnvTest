@@ -29,8 +29,8 @@ void TextRender::drawText(std::string str,int x, int y) {
 	rect.w *= 2;
 	rect.h *= 2;
     FC_DrawColor(mFont, mRenderer, x, y, mFontColor, str.c_str());
-	FC_SetDefaultColor(mFont,{255,255,0,255});
-	FC_DrawBoxScale(mFont, mRenderer, rect , {2,2} , str.c_str());
+	FC_SetDefaultColor(mFont,FC_MakeColor(255,255,0,255));
+	FC_DrawBoxScale(mFont, mRenderer, rect , FC_MakeScale(2,2) , str.c_str());
 }
 
 TextRender::~TextRender() {
