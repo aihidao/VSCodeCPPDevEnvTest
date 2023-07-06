@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include "TextRender.h"
 #include "DebugInfoBox.h"
+#include "GameStage.h"
 
 static int SCREEN_WIDTH = 800;
 static int SCREEN_HEIGHT = 800;
@@ -21,6 +22,8 @@ private:
 
     DebugInfoBox* mDebugInfoBox = NULL;
     Text* testText = NULL;
+
+    GameStage* mGameStage = NULL;
 
 public:
 

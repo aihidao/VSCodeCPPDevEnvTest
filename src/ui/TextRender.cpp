@@ -15,6 +15,9 @@ void TextRender::loadAssets() {
 }
 
 void TextRender::loadAssets(int fontSize) {
+	if(mFont != NULL){
+		FC_FreeFont(mFont);
+	}
 	mFont = FC_CreateFont();
 	#ifdef SDL_GPU_VERSION_MAJOR
 		FC_LoadFont(mFont, "assets/SmileySans-Oblique.ttf", fontSize, FC_MakeColor(color.r,color.g,color.b,color.a), TTF_STYLE_NORMAL);
@@ -29,8 +32,8 @@ void TextRender::drawText(std::string str,int x, int y) {
 	rect.w *= 2;
 	rect.h *= 2;
     FC_DrawColor(mFont, mRenderer, x, y, mFontColor, str.c_str());
-	FC_SetDefaultColor(mFont,FC_MakeColor(255,255,0,255));
-	FC_DrawBoxScale(mFont, mRenderer, rect , FC_MakeScale(2,2) , str.c_str());
+	// FC_SetDefaultColor(mFont,FC_MakeColor(255,255,0,255));
+	// FC_DrawBoxScale(mFont, mRenderer, rect , FC_MakeScale(2,2) , str.c_str());
 }
 
 TextRender::~TextRender() {

@@ -49,7 +49,9 @@ void Game::updateDraw() {
 	//Clear screen
 	SDL_RenderClear(mRenderer);
 
-	mDebugInfoBox->draw();
+	mGameStage->draw();
+
+	//mDebugInfoBox->draw();
 
 	//Update screen
 	SDL_RenderPresent(mRenderer);
@@ -159,10 +161,12 @@ bool Game::loadWidget()
 {
 	//Loading success flag
 	bool success = true;
-	mDebugInfoBox = new DebugInfoBox(mRenderer);
-	testText = new Text("test");
-	mDebugInfoBox->push(*testText);
+	//mDebugInfoBox = new DebugInfoBox(mRenderer);
+	// testText = new Text("test");
+	// mDebugInfoBox->push(*testText);
 	//mTextRender = new TextRender(mRenderer);
+
+	mGameStage = new GameStage(mRenderer);
 	return success;
 }
 
@@ -171,6 +175,7 @@ void Game::close()
 	//delete mTextRender;
 	delete mDebugInfoBox;
 	delete testText;
+	delete mGameStage;
 	//Destroy window	
 	SDL_DestroyRenderer(mRenderer);
 	SDL_DestroyWindow(mWindow);
