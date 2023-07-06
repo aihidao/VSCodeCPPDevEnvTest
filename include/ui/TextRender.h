@@ -11,7 +11,7 @@ private:
 public:
     TextRender(SDL_Renderer* renderer);
     void loadAssets();
-    void loadAssets(int fontSize);
+    void loadAssets(int fontSize,SDL_Color fontColor);
     void drawText(std::string str,int x, int y);
     ~TextRender();
 };

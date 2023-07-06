@@ -3,7 +3,7 @@
 GameStage::GameStage(SDL_Renderer* renderer){
     mRenderer = renderer;
     mTextRender = new TextRender(renderer);
-    mTextRender->loadAssets(15);
+    mTextRender->loadAssets(15, {0, 255, 0 , 255});
     mCellArray = new Cell*[10];
 
 	mCellArray = new Cell * [MAP_HEIGHT];
@@ -32,9 +32,9 @@ void GameStage::draw(){
 
 GameStage::~GameStage(){
     //delete mTextRender;
-    for(int i = 0;i < 10;i++){
-        delete mCellArray[i];
-    }
+	for (int i = 0; i < MAP_HEIGHT; i++) {
+		delete mCellArray[i];
+	}
     delete[] mCellArray;
 
     delete mTextRender;

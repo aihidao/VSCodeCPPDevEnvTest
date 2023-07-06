@@ -14,9 +14,16 @@ void TextRender::loadAssets() {
 	#endif
 }
 
-void TextRender::loadAssets(int fontSize) {
+void TextRender::loadAssets(int fontSize,SDL_Color fontColor) {
 	if(mFont != NULL){
 		FC_FreeFont(mFont);
+	}
+
+	if(!(fontColor.r == 0 && fontColor.g == 0 && fontColor.b == 0 && fontColor.a == 0)){
+		mFontColor.r = fontColor.r;
+		mFontColor.g = fontColor.g;
+		mFontColor.b = fontColor.b;
+		mFontColor.a = fontColor.a;
 	}
 	mFont = FC_CreateFont();
 	#ifdef SDL_GPU_VERSION_MAJOR
