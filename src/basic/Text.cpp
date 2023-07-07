@@ -8,6 +8,7 @@ Text::Text(std::string str) {
 }
 
 std::string Text::getStr(){
+    //printf("getStr:%s\n",mStr.c_str());
     return mStr;
 }
 

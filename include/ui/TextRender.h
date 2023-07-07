@@ -19,7 +19,7 @@ public:
     void loadAssets();
     void loadAssets(int fontSize,SDL_Color fontColor);
     void drawText(Text* text,int x, int y, int renderMode);
-    SDL_Rect drawString(std::string str,int x, int y);
+    void drawString(std::string str,int x, int y);
     ~TextRender();
 };
 

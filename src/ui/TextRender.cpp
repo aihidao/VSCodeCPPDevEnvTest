@@ -52,7 +52,7 @@ void TextRender::drawText(Text* text,int x, int y,int renderMode) {
 	text->setRect(rect);
 }
 
-SDL_Rect TextRender::drawString(std::string str,int x, int y) {
+void TextRender::drawString(std::string str,int x, int y) {
     FC_Rect rect = FC_Draw(mFont, mRenderer, x, y, str.c_str());
     FC_DrawColor(mFont, mRenderer, x, y, mFontColor, str.c_str());
 }
