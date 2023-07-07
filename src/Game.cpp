@@ -7,6 +7,21 @@ and may not be redistributed without written permission.*/
 #include <iostream>
 #include <stdio.h>
 #include <string>
+int	Game::SCREEN_WIDTH = 800;
+int	Game::SCREEN_HEIGHT = 600;
+
+int	Game::MAP_WIDTH = 50;
+int	Game::MAP_HEIGHT = 50;
+
+int	Game::CELL_SIZE_WIDTH = 50;
+int	Game::CELL_SIZE_HEIGHT = 25;
+Game::Game(){
+	printf("Screen width: %d\n", Game::SCREEN_WIDTH);
+	printf("Screen height: %d\n", Game::SCREEN_HEIGHT);
+
+	printf("Map width: %d\n", Game::MAP_WIDTH);
+	printf("Map height: %d\n", Game::MAP_HEIGHT);
+}
 
 void Game::update() {
 	//Main loop flag
@@ -173,8 +188,8 @@ bool Game::loadWidget()
 void Game::close()
 {
 	//delete mTextRender;
-	delete mDebugInfoBox;
-	delete testText;
+	//delete mDebugInfoBox;
+	//delete testText;
 	delete mGameStage;
 	//Destroy window	
 	SDL_DestroyRenderer(mRenderer);

@@ -4,6 +4,9 @@
 #include "SDL.h"
 #include "Cell.h"
 class GameStage{
+    public:
+        static int STAGE_POSITION_X;
+        static int STAGE_POSITION_Y;
     private:
         TextRender *mTextRender = NULL;
         SDL_Renderer *mRenderer = NULL;

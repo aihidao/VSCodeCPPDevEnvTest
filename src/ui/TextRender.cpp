@@ -33,14 +33,28 @@ void TextRender::loadAssets(int fontSize,SDL_Color fontColor) {
 	#endif
 }
 
-void TextRender::drawText(std::string str,int x, int y) {
+void TextRender::drawText(Text* text,int x, int y,int renderMode) {
+	int renderModeX = x;
+	int renderModeY = y;
+	if((renderMode & TextRender::RENDER_TYPE_W_CENTER) == 1){
+		renderModeX -= text->getRect().w / 2;
+	}
+
+	if((renderMode & TextRender::RENDER_TYPE_H_CENTER) == 1){
+		renderModeY -= text->getRect().h / 2;
+	}
+    //FC_Rect rect = FC_Draw(mFont, mRenderer, renderModeX, renderModeY, text->getStr().c_str());
+	//printf("draw:%s\n",text->getStr().c_str());
+	//std::string positionInfo = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+    FC_Rect rect = FC_DrawColor(mFont, mRenderer, renderModeX, renderModeY, mFontColor, text->getStr().c_str());
+	rect.x = x;
+	rect.y = y;
+	text->setRect(rect);
+}
+
+SDL_Rect TextRender::drawString(std::string str,int x, int y) {
     FC_Rect rect = FC_Draw(mFont, mRenderer, x, y, str.c_str());
-	rect.y += rect.h;
-	rect.w *= 2;
-	rect.h *= 2;
     FC_DrawColor(mFont, mRenderer, x, y, mFontColor, str.c_str());
-	// FC_SetDefaultColor(mFont,FC_MakeColor(255,255,0,255));
-	// FC_DrawBoxScale(mFont, mRenderer, rect , FC_MakeScale(2,2) , str.c_str());
 }
 
 TextRender::~TextRender() {

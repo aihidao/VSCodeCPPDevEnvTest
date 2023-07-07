@@ -14,7 +14,7 @@ void DebugInfoBox::draw() {
     int x = 0;
     int y = 0;
     for (Text text : textList) {
-        mTextRender->drawText(text.getStr(), x, y);
+        //mTextRender->drawText(text.getStr(), x, y);
         y += 20;
     }
 }

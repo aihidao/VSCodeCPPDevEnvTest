@@ -7,9 +7,16 @@
 #include "DebugInfoBox.h"
 #include "GameStage.h"
 
-static int SCREEN_WIDTH = 800;
-static int SCREEN_HEIGHT = 800;
 class Game {
+public:
+    static int SCREEN_WIDTH;
+    static int SCREEN_HEIGHT;
+
+    static int MAP_WIDTH;
+    static int MAP_HEIGHT;
+
+    static int CELL_SIZE_WIDTH;
+    static int CELL_SIZE_HEIGHT;
 private:
     //The window we'll be rendering to
     SDL_Window* mWindow = NULL;
@@ -20,12 +27,14 @@ private:
     //TextRender
     //TextRender* mTextRender = NULL;
 
-    DebugInfoBox* mDebugInfoBox = NULL;
-    Text* testText = NULL;
+    //DebugInfoBox* mDebugInfoBox = NULL;
+    //Text* testText = NULL;
 
     GameStage* mGameStage = NULL;
 
 public:
+
+    Game();
 
     bool start();
     //Starts up SDL and creates window
