@@ -8,9 +8,9 @@ class Text {
         SDL_Rect mRect;
     public:
         Text();
-        Text(std::string str);
-        std::string getStr();
-        void setStr(std::string strr);
+        Text(const std::string& str);
+        std::string getStr() const;
+        void setStr(const std::string& str);
         SDL_Rect getRect() ;
         void setRect(SDL_Rect rect);
         ~Text();

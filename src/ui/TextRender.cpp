@@ -36,16 +36,14 @@ void TextRender::loadAssets(int fontSize,SDL_Color fontColor) {
 void TextRender::drawText(Text* text,int x, int y,int renderMode) {
 	int renderModeX = x;
 	int renderModeY = y;
-	if((renderMode & TextRender::RENDER_TYPE_W_CENTER) == 1){
+	if((renderMode & TextRender::RENDER_TYPE_W_CENTER) == TextRender::RENDER_TYPE_W_CENTER){
 		renderModeX -= text->getRect().w / 2;
 	}
 
-	if((renderMode & TextRender::RENDER_TYPE_H_CENTER) == 1){
+	if((renderMode & TextRender::RENDER_TYPE_H_CENTER) == TextRender::RENDER_TYPE_H_CENTER){
 		renderModeY -= text->getRect().h / 2;
 	}
-    //FC_Rect rect = FC_Draw(mFont, mRenderer, renderModeX, renderModeY, text->getStr().c_str());
-	//printf("draw:%s\n",text->getStr().c_str());
-	//std::string positionInfo = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+
     FC_Rect rect = FC_DrawColor(mFont, mRenderer, renderModeX, renderModeY, mFontColor, text->getStr().c_str());
 	rect.x = x;
 	rect.y = y;

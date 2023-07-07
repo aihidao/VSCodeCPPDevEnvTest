@@ -3,16 +3,16 @@
 Text::Text() {
 }
 
-Text::Text(std::string str) {
+Text::Text(const std::string& str) {
     mStr = str;
 }
 
-std::string Text::getStr(){
+std::string Text::getStr() const {
     //printf("getStr:%s\n",mStr.c_str());
     return mStr;
 }
 
-void Text::setStr(std::string str) {
+void Text::setStr(const std::string& str) {
     mStr = str;
 }
 
