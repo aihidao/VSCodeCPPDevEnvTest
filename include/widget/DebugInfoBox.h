@@ -9,10 +9,15 @@ class DebugInfoBox {
     private:
         SDL_Renderer* mRenderer = NULL;
         TextRender* mTextRender = NULL;
-        std::vector<Text> textList;
+        int mWidth = 200;
+        int mHeight = 0;
+        // 0 表示左边 1 表示右边
+        int mPos = 0;
+        std::vector<Text*> textList;
     public:
         DebugInfoBox(SDL_Renderer* renderer);
-        void push(Text text);
+        void handleEvent(SDL_Event* e);
+        void push(Text* text);
         void draw();
         ~DebugInfoBox();
 };

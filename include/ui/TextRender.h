@@ -16,6 +16,7 @@ private:
     SDL_Color mFontColor = {255,0,0,255};
 public:
     TextRender(SDL_Renderer* renderer);
+    TextRender(SDL_Renderer* renderer, int fontSize, SDL_Color fontColor);
     void loadAssets();
     void loadAssets(int fontSize,SDL_Color fontColor);
     void drawText(Text* text,int x, int y, int renderMode);

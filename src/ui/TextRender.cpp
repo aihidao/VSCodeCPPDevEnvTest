@@ -5,6 +5,11 @@ TextRender::TextRender(SDL_Renderer* renderer) {
     loadAssets();
 }
 
+TextRender::TextRender(SDL_Renderer* renderer, int fontSize, SDL_Color fontColor) {
+    mRenderer = renderer;
+    loadAssets(fontSize, fontColor);
+}
+
 void TextRender::loadAssets() {
 	mFont = FC_CreateFont();
 	#ifdef SDL_GPU_VERSION_MAJOR
@@ -14,7 +19,7 @@ void TextRender::loadAssets() {
 	#endif
 }
 
-void TextRender::loadAssets(int fontSize,SDL_Color fontColor) {
+void TextRender::loadAssets(int fontSize, SDL_Color fontColor) {
 	if(mFont != NULL){
 		FC_FreeFont(mFont);
 	}

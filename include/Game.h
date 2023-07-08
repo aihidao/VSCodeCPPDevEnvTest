@@ -27,8 +27,16 @@ private:
     //TextRender
     //TextRender* mTextRender = NULL;
 
-    //DebugInfoBox* mDebugInfoBox = NULL;
-    //Text* testText = NULL;
+    DebugInfoBox* mDebugInfoBox = NULL;
+    //fps
+    int frameCount = 0;
+    Uint32 frameStart;
+    Text* mFpsText = NULL;
+    //mouse position
+    int mMouseX = 0;
+    int mMouseY = 0;
+    Text* mMousePosition = NULL;
+    Text* mStagePosition = NULL;
 
     GameStage* mGameStage = NULL;
 
@@ -43,6 +51,7 @@ public:
     //Loads media
     bool loadWidget();
 
+    bool handleEvent(SDL_Event* e);
 
     void update();
 
