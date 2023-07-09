@@ -13,8 +13,8 @@ and may not be redistributed without written permission.*/
 int	Game::SCREEN_WIDTH = 800;
 int	Game::SCREEN_HEIGHT = 600;
 
-int	Game::MAP_WIDTH = 50;
-int	Game::MAP_HEIGHT = 50;
+int	Game::MAP_WIDTH = 1000;
+int	Game::MAP_HEIGHT = 1000;
 
 int	Game::CELL_SIZE_WIDTH = 50;
 int	Game::CELL_SIZE_HEIGHT = 50;
@@ -63,7 +63,7 @@ bool Game::handleEvent(SDL_Event* e)
 			std::string stageShowInfo = "Stage Show:(" + std::to_string(GameStage::TOP_LEFT_CELL_GRID_X) + "," + std::to_string(GameStage::TOP_LEFT_CELL_GRID_Y) + ") <-> (" + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_X) + "," + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_Y) + ")" ;
 			mStageShow->setStr(stageShowInfo);
 
-			SDL_Point realPos = GridCoordinateConverterUtils::convertToReal({- GameStage::STAGE_POSITION_X + mMouseX, - GameStage::STAGE_POSITION_Y + mMouseY});
+			SDL_Point realPos = GridCoordinateConverterUtils::convertToReal({mMouseX, mMouseY});
 			int posX = realPos.x / Game::CELL_SIZE_WIDTH;
 			int posY = realPos.y / Game::CELL_SIZE_HEIGHT;
 
@@ -114,7 +114,7 @@ bool Game::loadWidget()
 	mDebugInfoBox->push(mStageShow);
 	//mTextRender = new TextRender(mRenderer);
 	mGameStage = new GameStage(mRenderer);
-	
+	mGameStage->getShowGridInfo();
 	return success;
 }
 

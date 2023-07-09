@@ -25,8 +25,8 @@ GameStage::GameStage(SDL_Renderer* renderer){
 }
 
 void GameStage::getShowGridInfo(){
-	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({- GameStage::STAGE_POSITION_X + Game::SCREEN_WIDTH / 2, - GameStage::STAGE_POSITION_Y});
-	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({- GameStage::STAGE_POSITION_X + Game::SCREEN_WIDTH / 2, - GameStage::STAGE_POSITION_Y + Game::SCREEN_HEIGHT});
+	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({ Game::SCREEN_WIDTH / 2, - 300});
+	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT  + 300});
 
 	GameStage::TOP_LEFT_CELL_GRID_X = realTopLeft.x / Game::CELL_SIZE_WIDTH;
 	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X >= 0 ? GameStage::TOP_LEFT_CELL_GRID_X : 0;
@@ -88,17 +88,17 @@ void GameStage::mouseUp(SDL_Event* e) {
 }
 
 void GameStage::draw(){
-	for (int y = 0; y < Game::MAP_HEIGHT; y++) {
-		for (int x = 0; x < Game::MAP_WIDTH; x++) {
-			mCellArray[y * Game::MAP_WIDTH + x]->draw();
-		}
-	}
-	// 打印地图数据
-	// for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
-	// 	for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
+	// for (int y = 0; y < Game::MAP_HEIGHT; y++) {
+	// 	for (int x = 0; x < Game::MAP_WIDTH; x++) {
 	// 		mCellArray[y * Game::MAP_WIDTH + x]->draw();
 	// 	}
 	// }
+	// 打印地图数据
+	for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
+		for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
+			mCellArray[y * Game::MAP_WIDTH + x]->draw();
+		}
+	}
 }
 
 GameStage::~GameStage(){
