@@ -1,5 +1,5 @@
 #include "TextRender.h"
-
+#include "Game.h"
 TextRender::TextRender(SDL_Renderer* renderer) {
     mRenderer = renderer;
     loadAssets();

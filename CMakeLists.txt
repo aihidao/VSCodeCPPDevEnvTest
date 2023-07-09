@@ -49,6 +49,7 @@ include_directories(include)
 include_directories(include/basic)
 include_directories(include/entity)
 include_directories(include/ui)
+include_directories(include/utils)
 include_directories(include/widget)
 
 link_directories(${SDL2_LINK_DIR})
@@ -59,6 +60,7 @@ aux_source_directory(src SOURCE_FILES)
 aux_source_directory(src/basic SOURCE_FILES)
 aux_source_directory(src/entity SOURCE_FILES)
 aux_source_directory(src/ui SOURCE_FILES)
+aux_source_directory(src/utils SOURCE_FILES)
 aux_source_directory(src/widget SOURCE_FILES)
 
 #生成的可执行文件放入 bin文件中

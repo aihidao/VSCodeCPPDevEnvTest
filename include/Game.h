@@ -35,8 +35,12 @@ private:
     //mouse position
     int mMouseX = 0;
     int mMouseY = 0;
+    int mMouseSelectX = 0;
+    int mMouseSelectY = 0;
     Text* mMousePosition = NULL;
+    Text* mMouseSelectPos = NULL;
     Text* mStagePosition = NULL;
+    Text* mStageShow = NULL;
 
     GameStage* mGameStage = NULL;
 

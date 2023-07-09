@@ -1,6 +1,8 @@
 #include "Cell.h"
 #include "Game.h"
+#include <cmath>
 #include "GameStage.h"
+#include "GridCoordinateConverterUtils.h"
 Cell::Cell(){
     mRenderer = NULL;
     mLocalX = 0;
@@ -22,19 +24,25 @@ Cell::Cell(SDL_Renderer* renderer, TextRender *textRender, int x, int y, int typ
 }
 
 void Cell::draw(){
-    int positionX = GameStage::STAGE_POSITION_X + (mLocalX - mLocalY) * Game::CELL_SIZE_WIDTH;
-	int positionY = GameStage::STAGE_POSITION_Y + (mLocalY + mLocalX) * Game::CELL_SIZE_HEIGHT;
+    int gridX = mLocalX * Game::CELL_SIZE_WIDTH;
+    int gridY = mLocalY * Game::CELL_SIZE_HEIGHT;
 
-    // 菱形的四个顶点坐标
-	int x1 = positionX - Game::CELL_SIZE_WIDTH, y1 = positionY + 0; // 顶部顶点
-	int x2 = positionX + 0, y2 = positionY + Game::CELL_SIZE_HEIGHT; // 右侧顶点
-	int x3 = positionX + Game::CELL_SIZE_WIDTH, y3 = positionY + 0; // 底部顶点
-	int x4 = positionX + 0, y4 = positionY - Game::CELL_SIZE_HEIGHT; // 左侧顶点
-	SDL_Point points[] = { {x1, y1}, {x2, y2}, {x3, y3}, {x4, y4}, {x1, y1} };
+    SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({gridX, gridY});
+
+    SDL_Point p1 = (GridCoordinateConverterUtils::convertToDraw({gridX + 0, gridY + 0}));
+    SDL_Point p2 = (GridCoordinateConverterUtils::convertToDraw({gridX + Game::CELL_SIZE_WIDTH, gridY + 0}));
+    SDL_Point p3 = (GridCoordinateConverterUtils::convertToDraw({gridX + Game::CELL_SIZE_WIDTH, gridY + Game::CELL_SIZE_HEIGHT}));
+    SDL_Point p4 = (GridCoordinateConverterUtils::convertToDraw({gridX + 0, gridY + Game::CELL_SIZE_HEIGHT}));
+	SDL_Point points[] = { 
+        {p1.x + GameStage::STAGE_POSITION_X, p1.y + GameStage::STAGE_POSITION_Y},
+        {p2.x + GameStage::STAGE_POSITION_X, p2.y + GameStage::STAGE_POSITION_Y},
+        {p3.x + GameStage::STAGE_POSITION_X, p3.y + GameStage::STAGE_POSITION_Y},
+        {p4.x + GameStage::STAGE_POSITION_X, p4.y + GameStage::STAGE_POSITION_Y},
+        {p1.x + GameStage::STAGE_POSITION_X, p1.y + GameStage::STAGE_POSITION_Y}
+        };
     SDL_SetRenderDrawColor(mRenderer, 0xff, 0x00, 0x00, 0xff);
 	SDL_RenderDrawLines(mRenderer, points, 5);
-
-    mTextRender->drawText(mText,positionX,positionY,TextRender::RENDER_TYPE_CENTER);
+    mTextRender->drawText(mText, GameStage::STAGE_POSITION_X + readPos.x, GameStage::STAGE_POSITION_Y + readPos.y + Game::CELL_SIZE_HEIGHT / 2, TextRender::RENDER_TYPE_CENTER);
 }
 
 Cell::~Cell(){
