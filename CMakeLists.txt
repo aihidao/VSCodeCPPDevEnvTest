@@ -3,6 +3,14 @@ cmake_minimum_required(VERSION 2.8)
 #项目名称
 project(HelloSLAM)
 
+set(CMAKE_CXX_STANDARD 11)
+
+#设置编译模式  可见性问题 这个不是正常解决方案，最好是自己加锁。
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -00")
+
+# 查找线程库
+# find_package(Threads REQUIRED)
+
 #根据当前系统配置不同的库 WIN32 代表windows系统 APPLE 代表苹果系统
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # Windows 系统
@@ -22,7 +30,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     # Mac 系统
     message("当前系统是 Mac")
-    set(CMAKE_CXX_STANDARD 11)
+
     
     SET(SDL2_INCLUDE_DIR "/opt/homebrew/Cellar/sdl2/2.28.0/include/SDL2")
     SET(SDL2_LINK_DIR "/opt/homebrew/Cellar/sdl2/2.28.0/lib")
@@ -66,8 +74,10 @@ aux_source_directory(src/widget SOURCE_FILES)
 #生成的可执行文件放入 bin文件中
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
+
 #增加一个可执行的二进制
 add_executable(helloSLAM main.cpp ${SOURCE_FILES})
+#target_link_libraries(helloSLAM PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(helloSLAM SDL2main)
 target_link_libraries(helloSLAM SDL2)
 target_link_libraries(helloSLAM SDL2_image)

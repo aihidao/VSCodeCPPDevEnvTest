@@ -6,7 +6,7 @@
 #include "TextRender.h"
 #include "DebugInfoBox.h"
 #include "GameStage.h"
-
+#include <atomic>
 class Game {
 public:
     static int SCREEN_WIDTH;
@@ -25,7 +25,10 @@ private:
     SDL_Renderer* mRenderer = NULL;
 
     //TextRender
-    //TextRender* mTextRender = NULL;
+    TextRender* mTextRender = NULL;
+    //loadingInfo
+    Text* mLoadingInfo = NULL;
+    volatile bool mNeedLoading = false;
 
     DebugInfoBox* mDebugInfoBox = NULL;
     //fps

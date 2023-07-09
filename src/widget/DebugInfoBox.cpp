@@ -6,6 +6,12 @@ DebugInfoBox::DebugInfoBox(SDL_Renderer* renderer) {
     textList = std::vector<Text*>();
 }
 
+DebugInfoBox::DebugInfoBox(SDL_Renderer* renderer, TextRender* mTextRender) {
+    mRenderer = renderer;
+    mTextRender = mTextRender;
+    textList = std::vector<Text*>();
+}
+
 void DebugInfoBox::handleEvent(SDL_Event* e) {
     if (e->type == SDL_MOUSEMOTION) {
         int x = e->button.x;

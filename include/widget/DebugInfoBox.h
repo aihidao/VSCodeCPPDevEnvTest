@@ -16,6 +16,7 @@ class DebugInfoBox {
         std::vector<Text*> textList;
     public:
         DebugInfoBox(SDL_Renderer* renderer);
+        DebugInfoBox(SDL_Renderer* renderer, TextRender* mTextRender);
         void handleEvent(SDL_Event* e);
         void push(Text* text);
         void draw();

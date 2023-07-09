@@ -4,11 +4,13 @@ and may not be redistributed without written permission.*/
 //Using SDL, SDL_image, standard IO, and strings
 #include "Game.h"
 #include <SDL_ttf.h>
+#include <SDL_thread.h>
 #include <iostream>
 #include <stdio.h>
 #include <string>
 #include <cmath>
 #include <Game.h>
+#include <thread>
 #include "GridCoordinateConverterUtils.h"
 int	Game::SCREEN_WIDTH = 800;
 int	Game::SCREEN_HEIGHT = 600;
@@ -98,9 +100,9 @@ void Game::updateDraw() {
 bool Game::loadWidget()
 {
 	//Loading success flag
+	//mNeedLoading = true;
 	bool success = true;
 	
-
 	mDebugInfoBox = new DebugInfoBox(mRenderer);
 	mFpsText = new Text("UNDEFINED");
 	mMousePosition = new Text("UNDEFINED");
@@ -115,6 +117,11 @@ bool Game::loadWidget()
 	//mTextRender = new TextRender(mRenderer);
 	mGameStage = new GameStage(mRenderer);
 	mGameStage->getShowGridInfo();
+	std::cout << "CHANGE BEFORE:" << mNeedLoading << "\n" << std::endl;
+	mNeedLoading = false;
+	//mNeedLoading.exchange(false, std::memory_order_acq_rel);
+	std::cout << "CHANGE AFTER:" << mNeedLoading << "\n" << std::endl;
+
 	return success;
 }
 
@@ -133,6 +140,13 @@ void Game::calculateFps() {
 	}
 }
 
+static int loading(void* data) {
+	printf("loading start\n");
+	((Game*)data)->loadWidget();
+	printf("loading end\n");
+	return 0;
+}
+
 bool Game::start() {
 	//Start up SDL and create window
 	if (!init())
@@ -142,15 +156,35 @@ bool Game::start() {
 	else
 	{
 		//Load media
-		if (!loadWidget())
-		{
-			printf("Failed to load media!\n");
+		mLoadingInfo = new Text("Loading...");
+		mTextRender = new TextRender(mRenderer, 15, {0, 255, 0, 255});
+		//mNeedLoading.exchange(true, std::memory_order_acq_rel);
+		mNeedLoading = true;
+		SDL_Thread* thread = SDL_CreateThread(loading, "Test", this);
+		SDL_DetachThread(thread);
+
+		while(mNeedLoading){
+			//printf("loop\n");
+			//std::cout << "CHANGE AFTER:" << mNeedLoading.load(std::memory_order_acquire) << std::endl;
+			SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
+			//Clear screen
+			SDL_RenderClear(mRenderer);
+			//mLoadingInfo->setStr("Need loading:" + std::to_string(mNeedLoading));
+			mTextRender->drawString(mLoadingInfo->getStr(),100,100);
+			//Update screen
+			SDL_RenderPresent(mRenderer);
 		}
-		else
-		{
-			//timmers
-			update();
-		}
+		printf("loading over!!!\n");
+		update();
+		// if (!loadWidget())
+		// {
+		// 	printf("Failed to load media!\n");
+		// }
+		// else
+		// {
+		// 	//timmers
+		// 	update();
+		// }
 	}
 
 	//Free resources and close SDL
@@ -222,7 +256,7 @@ bool Game::init()
 
 void Game::close()
 {
-	//delete mTextRender;
+	delete mTextRender;
 	delete mFpsText;
 	delete mMousePosition;
 	delete mMouseSelectPos;
