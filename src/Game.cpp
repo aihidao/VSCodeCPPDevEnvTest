@@ -229,7 +229,6 @@ void Game::close()
 	delete mStagePosition;
 	delete mStageShow;
 	delete mDebugInfoBox;
-	delete mStagePosition;
 	delete mGameStage;
 	//Destroy window	
 	SDL_DestroyRenderer(mRenderer);
