@@ -22,12 +22,15 @@ class GameStage{
         bool mIsMove = false;
         int mDownMovePositionX = 0;
         int mDownMovePositionY = 0;
+
+        volatile int initProgress = 0;
     private:
         TextRender *mTextRender = NULL;
         SDL_Renderer *mRenderer = NULL;
         Cell** mCellArray = NULL;
     public:
         GameStage(SDL_Renderer* renderer);
+        void initGrid();
         void getShowGridInfo();
         void handleEvent(SDL_Event* e);
         void mouseDown(SDL_Event *e);

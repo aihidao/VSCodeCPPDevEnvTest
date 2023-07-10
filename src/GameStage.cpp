@@ -17,9 +17,12 @@ GameStage::GameStage(SDL_Renderer* renderer){
     mRenderer = renderer;
     mTextRender = new TextRender(renderer, 15, {0, 0, 0, 255});
     //mTextRender->loadAssets(15, {0, 255, 0 , 255});
+}
 
+void GameStage::initGrid(){
 	mCellArray = new Cell* [Game::MAP_HEIGHT * Game::MAP_WIDTH];
 	for (int i = 0; i < Game::MAP_HEIGHT  * Game::MAP_WIDTH; i++) {
+		++initProgress;
 		mCellArray[i] = new Cell(mRenderer,mTextRender,i % Game::MAP_WIDTH,i / Game::MAP_WIDTH,0);
 	}
 }

@@ -20,15 +20,16 @@ public:
 private:
     //The window we'll be rendering to
     SDL_Window* mWindow = NULL;
-
     //The window renderer
     SDL_Renderer* mRenderer = NULL;
+
+    //SDL_Renderer* mLoadinigRenderer = NULL;
 
     //TextRender
     TextRender* mTextRender = NULL;
     //loadingInfo
     Text* mLoadingInfo = NULL;
-    volatile bool mNeedLoading = false;
+    bool mNeedLoading = true;
 
     DebugInfoBox* mDebugInfoBox = NULL;
     //fps

@@ -28,21 +28,109 @@ Game::Game(){
 	printf("Map height: %d\n", Game::MAP_HEIGHT);
 }
 
+static int loading(void* data) {
+	printf("loading start\n");
+	try{
+		((Game*)data)->loadWidget();
+	}catch(std::exception& e){
+		//其他的错误
+		std::cout << "ERROR:" << e.what() << std::endl;
+	}
+
+	printf("loading end\n");
+	return 0;
+}
+
+bool Game::start() {
+	//Start up SDL and create window
+	if (!init())
+	{
+		printf("Failed to initialize!\n");
+	}
+	else
+	{
+		//mNeedLoading.exchange(true, std::memory_order_acq_rel);
+		//mLoadinigRenderer = SDL_CreateRenderer(mWindow, 0, SDL_RENDERER_ACCELERATED);
+		//Load media
+		mLoadingInfo = new Text("Loading...");
+		mTextRender = new TextRender(mRenderer, 15, {0, 255, 0, 255});
+		std::cout << "CHANGE BEFORE DebugInfoBox:" << "\n" << std::endl;
+		mDebugInfoBox = new DebugInfoBox(mRenderer);
+		std::cout << "CHANGE BEFORE TEXT:" << "\n" << std::endl;
+		mFpsText = new Text("UNDEFINED");
+		mMousePosition = new Text("UNDEFINED");
+		mMouseSelectPos = new Text("UNDEFINED");
+		mStagePosition = new Text("UNDEFINED");
+		mStageShow = new Text("UNDEFINED");
+		std::cout << "CHANGE BEFORE push:" << "\n" << std::endl;
+		mDebugInfoBox->push(mFpsText);
+		mDebugInfoBox->push(mMousePosition);
+		mDebugInfoBox->push(mMouseSelectPos);
+		mDebugInfoBox->push(mStagePosition);
+		mDebugInfoBox->push(mStageShow);
+		std::cout << "CHANGE BEFORE mGameStage:" << "\n" << std::endl;
+		//mTextRender = new TextRender(mRenderer);
+		mGameStage = new GameStage(mRenderer);
+		SDL_Thread* thread = SDL_CreateThread(loading, "Test", this);
+		SDL_DetachThread(thread);
+		//SDL_WaitThread(thread, NULL);
+		update();
+	}
+
+	//Free resources and close SDL
+	close();
+	return true;
+}
+
 void Game::update() {
 	//Main loop flag
 	bool quit = false;
-
 	//Event handler
 	SDL_Event e;
 
 	//While application is running
 	while (!quit)
 	{
-		//Handle events on queue
-		quit = handleEvent(&e);
-		calculateFps();
-		updateDraw();
+		try
+		{
+			if(!mNeedLoading){
+				//Handle events on queue
+				quit = handleEvent(&e);
+				calculateFps();
+				updateDraw();
+			}else{
+				while (SDL_PollEvent(&e) != 0)
+				{
+					quit = handleEvent(&e);
+				}
+				//printf("./loop \n");
+				//std::cout << "CHANGE AFTER --> :" << std::to_string(mNeedLoading) << std::endl;
+				SDL_SetRenderDrawColor(mRenderer, 125, 125, 125, 0xFF);
+				//Clear screen
+				SDL_RenderClear(mRenderer);
+				if(mGameStage != NULL){
+					int fullCount = 500;
+					int progressCount = fullCount * ((mGameStage->initProgress) * 1.0f / (Game::MAP_WIDTH * Game::MAP_HEIGHT));
+					SDL_Rect rect = {200,200, progressCount, 50};
+					SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 0xFF);
+					SDL_RenderFillRect(mRenderer, &rect);
+					SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
+					SDL_Rect rectFill = {200,200, fullCount, 50};
+					SDL_RenderDrawRect(mRenderer, &rectFill);
+					mLoadingInfo->setStr("Need loading:" + std::to_string(mGameStage->initProgress) + "/" + std::to_string(Game::MAP_WIDTH * Game::MAP_HEIGHT) + "/" + std::to_string(progressCount));
+					mTextRender->drawString(mLoadingInfo->getStr(),100,100);
+				}
+				//Update screen
+				SDL_RenderPresent(mRenderer);
+			}
+		}
+		catch(std::exception& e)
+		{
+			//其他的错误
+			std::cout << "ERROR:" << e.what() << std::endl;
+		}
 	}
+	
 }
 
 bool Game::handleEvent(SDL_Event* e)
@@ -102,20 +190,7 @@ bool Game::loadWidget()
 	//Loading success flag
 	//mNeedLoading = true;
 	bool success = true;
-	
-	mDebugInfoBox = new DebugInfoBox(mRenderer);
-	mFpsText = new Text("UNDEFINED");
-	mMousePosition = new Text("UNDEFINED");
-	mMouseSelectPos = new Text("UNDEFINED");
-	mStagePosition = new Text("UNDEFINED");
-	mStageShow = new Text("UNDEFINED");
-	mDebugInfoBox->push(mFpsText);
-	mDebugInfoBox->push(mMousePosition);
-	mDebugInfoBox->push(mMouseSelectPos);
-	mDebugInfoBox->push(mStagePosition);
-	mDebugInfoBox->push(mStageShow);
-	//mTextRender = new TextRender(mRenderer);
-	mGameStage = new GameStage(mRenderer);
+	mGameStage->initGrid();
 	mGameStage->getShowGridInfo();
 	std::cout << "CHANGE BEFORE:" << mNeedLoading << "\n" << std::endl;
 	mNeedLoading = false;
@@ -139,59 +214,6 @@ void Game::calculateFps() {
 		mFpsText->setStr(fpsInfo);
 	}
 }
-
-static int loading(void* data) {
-	printf("loading start\n");
-	((Game*)data)->loadWidget();
-	printf("loading end\n");
-	return 0;
-}
-
-bool Game::start() {
-	//Start up SDL and create window
-	if (!init())
-	{
-		printf("Failed to initialize!\n");
-	}
-	else
-	{
-		//Load media
-		mLoadingInfo = new Text("Loading...");
-		mTextRender = new TextRender(mRenderer, 15, {0, 255, 0, 255});
-		//mNeedLoading.exchange(true, std::memory_order_acq_rel);
-		mNeedLoading = true;
-		SDL_Thread* thread = SDL_CreateThread(loading, "Test", this);
-		SDL_DetachThread(thread);
-
-		while(mNeedLoading){
-			//printf("loop\n");
-			//std::cout << "CHANGE AFTER:" << mNeedLoading.load(std::memory_order_acquire) << std::endl;
-			SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
-			//Clear screen
-			SDL_RenderClear(mRenderer);
-			//mLoadingInfo->setStr("Need loading:" + std::to_string(mNeedLoading));
-			mTextRender->drawString(mLoadingInfo->getStr(),100,100);
-			//Update screen
-			SDL_RenderPresent(mRenderer);
-		}
-		printf("loading over!!!\n");
-		update();
-		// if (!loadWidget())
-		// {
-		// 	printf("Failed to load media!\n");
-		// }
-		// else
-		// {
-		// 	//timmers
-		// 	update();
-		// }
-	}
-
-	//Free resources and close SDL
-	close();
-	return true;
-}
-
 
 bool Game::init()
 {
@@ -264,7 +286,8 @@ void Game::close()
 	delete mStageShow;
 	delete mDebugInfoBox;
 	delete mGameStage;
-	//Destroy window	
+	//Destroy window
+	//SDL_DestroyRenderer(mLoadinigRenderer);
 	SDL_DestroyRenderer(mRenderer);
 	SDL_DestroyWindow(mWindow);
 	mWindow = NULL;
