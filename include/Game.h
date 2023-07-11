@@ -4,6 +4,7 @@
 #include "SDL_FontCache.h"
 #include <SDL_image.h>
 #include "TextRender.h"
+#include "LoadingPage.h"
 #include "DebugInfoBox.h"
 #include "GameStage.h"
 #include <atomic>
@@ -17,6 +18,8 @@ public:
 
     static int CELL_SIZE_WIDTH;
     static int CELL_SIZE_HEIGHT;
+
+    static volatile int initProgress;
 private:
     //The window we'll be rendering to
     SDL_Window* mWindow = NULL;
@@ -27,10 +30,11 @@ private:
 
     //TextRender
     TextRender* mTextRender = NULL;
-    //loadingInfo
-    Text* mLoadingInfo = NULL;
-    bool mNeedLoading = true;
 
+    bool mNeedLoading = true;
+    LoadingPage* mLloadingPage = NULL;
+
+    SDL_Thread* mLoadingThread = NULL;
     DebugInfoBox* mDebugInfoBox = NULL;
     //fps
     int frameCount = 0;
@@ -57,7 +61,9 @@ public:
     bool init();
 
     //Loads media
-    bool loadWidget();
+    bool initGameStage();
+
+    bool calculateGameDate();
 
     bool handleEvent(SDL_Event* e);
 
@@ -65,12 +71,9 @@ public:
 
     void calculateFps();
 
-
     void updateDraw();
-
     //刷新事件函数
     Uint32 timerCallBack();
-
     //Frees media and shuts down SDL
     void close();
 };

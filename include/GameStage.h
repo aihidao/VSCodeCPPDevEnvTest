@@ -23,7 +23,7 @@ class GameStage{
         int mDownMovePositionX = 0;
         int mDownMovePositionY = 0;
 
-        volatile int initProgress = 0;
+
     private:
         TextRender *mTextRender = NULL;
         SDL_Renderer *mRenderer = NULL;

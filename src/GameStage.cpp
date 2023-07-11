@@ -22,7 +22,7 @@ GameStage::GameStage(SDL_Renderer* renderer){
 void GameStage::initGrid(){
 	mCellArray = new Cell* [Game::MAP_HEIGHT * Game::MAP_WIDTH];
 	for (int i = 0; i < Game::MAP_HEIGHT  * Game::MAP_WIDTH; i++) {
-		++initProgress;
+		++Game::initProgress;
 		mCellArray[i] = new Cell(mRenderer,mTextRender,i % Game::MAP_WIDTH,i / Game::MAP_WIDTH,0);
 	}
 }
