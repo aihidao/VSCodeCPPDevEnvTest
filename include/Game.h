@@ -32,7 +32,7 @@ private:
     TextRender* mTextRender = NULL;
 
     bool mNeedLoading = true;
-    LoadingPage* mLloadingPage = NULL;
+    LoadingPage* mLoadingPage = NULL;
 
     SDL_Thread* mLoadingThread = NULL;
     DebugInfoBox* mDebugInfoBox = NULL;

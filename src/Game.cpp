@@ -62,11 +62,8 @@ bool Game::start() {
 }
 
 bool Game::initGameStage(){
-		//mNeedLoading.exchange(true, std::memory_order_acq_rel);
-		//mLoadinigRenderer = SDL_CreateRenderer(mWindow, 0, SDL_RENDERER_ACCELERATED);
 		//Load media
-		//
-		mLloadingPage = new LoadingPage(mRenderer);
+		mLoadingPage = new LoadingPage(mRenderer);
 		mTextRender = new TextRender(mRenderer, 15, {0, 255, 0, 255});
 		mDebugInfoBox = new DebugInfoBox(mRenderer);
 		mFpsText = new Text("UNDEFINED");
@@ -79,7 +76,6 @@ bool Game::initGameStage(){
 		mDebugInfoBox->push(mMouseSelectPos);
 		mDebugInfoBox->push(mStagePosition);
 		mDebugInfoBox->push(mStageShow);
-		//mTextRender = new TextRender(mRenderer);
 		mGameStage = new GameStage(mRenderer);
 }
 
@@ -149,8 +145,8 @@ void Game::update() {
 				calculateFps();
 				updateDraw();
 			}else{
-				mLloadingPage->handleEvent(&e);
-				mLloadingPage->draw();
+				mLoadingPage->handleEvent(&e);
+				mLoadingPage->draw();
 			}
 		}
 		catch(std::exception& e)
@@ -253,7 +249,7 @@ bool Game::init()
 
 void Game::close()
 {
-	//delete mLoadingThread;
+	delete mLoadingPage;
 	delete mTextRender;
 	delete mFpsText;
 	delete mMousePosition;
