@@ -3,7 +3,7 @@ and may not be redistributed without written permission.*/
 
 //Using SDL, SDL_image, standard IO, and strings
 #include "Game.h"
-#include <SDL_ttf.h>
+#include "SDL_ttf.h"
 #include <SDL_thread.h>
 #include <iostream>
 #include <stdio.h>
@@ -15,8 +15,8 @@ and may not be redistributed without written permission.*/
 int	Game::SCREEN_WIDTH = 800;
 int	Game::SCREEN_HEIGHT = 600;
 
-int	Game::MAP_WIDTH = 1000;
-int	Game::MAP_HEIGHT = 1000;
+int	Game::MAP_WIDTH = 500;
+int	Game::MAP_HEIGHT = 500;
 
 int	Game::CELL_SIZE_WIDTH = 50;
 int	Game::CELL_SIZE_HEIGHT = 50;
@@ -31,7 +31,6 @@ Game::Game(){
 }
 
 static int loading(void* data) {
-	printf("loading start\n");
 	try{
 		((Game*)data)->calculateGameDate();
 	}catch(std::exception& e){
@@ -107,7 +106,6 @@ void Game::update() {
 				//Handle events on queue
 				quit = mGameStage->handleEvent(&e);
 				mGameStage->draw();
-
 			}else{
 				quit = mLoadingPage->handleEvent(&e);
 				mLoadingPage->draw();

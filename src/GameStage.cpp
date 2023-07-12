@@ -60,20 +60,16 @@ void GameStage::getShowGridInfo(){
 }
 
 bool GameStage::handleEvent(SDL_Event* e){
-	printf("envent:%s\n",e->type);
 	calculateFps();
 	bool quit = false;
 	while(SDL_PollEvent(e) != 0){
 		if (e->type == SDL_QUIT) {
-			printf("SDL_QUIT\n");
 			quit = true;
 		}else if (e->type == SDL_MOUSEBUTTONDOWN) {
-			printf("SDL_MOUSEBUTTONDOWN\n");
 			if (e->button.button == SDL_BUTTON_RIGHT) {
 				mouseDown(e);
 			}
 		}else if (e->type == SDL_MOUSEMOTION) {
-			printf("----------------");
 			SDL_GetMouseState(&mMouseX, &mMouseY);
 			std::string mousePosInfo = "Mouse Pos :(" + std::to_string(mMouseX) + "," + std::to_string(mMouseY) + ")";
 			mMousePosition->setStr(mousePosInfo);
@@ -92,12 +88,11 @@ bool GameStage::handleEvent(SDL_Event* e){
 			mouseMove(e);
 			}
 		else if (e->type == SDL_MOUSEBUTTONUP) {
-			printf("SDL_MOUSEBUTTONUP\n");
 			if (e->button.button == SDL_BUTTON_RIGHT) {
 				mouseUp(e);
 			}
 		}else{
-			printf("NOTHING:%s\n",e->type);
+			
 		}
 		mDebugInfoBox->handleEvent(e);
 	}
