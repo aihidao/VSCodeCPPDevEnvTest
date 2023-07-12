@@ -3,6 +3,8 @@
 #include "TextRender.h"
 #include "SDL.h"
 #include "Cell.h"
+#include "DebugInfoBox.h"
+#include "Text.h"
 class GameStage{
     public:
         static int STAGE_POSITION_X;
@@ -22,17 +24,31 @@ class GameStage{
         bool mIsMove = false;
         int mDownMovePositionX = 0;
         int mDownMovePositionY = 0;
-
-
     private:
         TextRender *mTextRender = NULL;
         SDL_Renderer *mRenderer = NULL;
         Cell** mCellArray = NULL;
+
+        DebugInfoBox* mDebugInfoBox = NULL;
+        //fps
+        int frameCount = 0;
+        Uint32 frameStart;
+        Text* mFpsText = NULL;
+        //mouse position
+        int mMouseX = 0;
+        int mMouseY = 0;
+        int mMouseSelectX = 0;
+        int mMouseSelectY = 0;
+        Text* mMousePosition = NULL;
+        Text* mMouseSelectPos = NULL;
+        Text* mStagePosition = NULL;
+        Text* mStageShow = NULL;
     public:
         GameStage(SDL_Renderer* renderer);
         void initGrid();
         void getShowGridInfo();
-        void handleEvent(SDL_Event* e);
+        bool handleEvent(SDL_Event* e);
+        void calculateFps();
         void mouseDown(SDL_Event *e);
         void mouseMove(SDL_Event* e);
         void mouseUp(SDL_Event* e);

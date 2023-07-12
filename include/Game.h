@@ -29,26 +29,11 @@ private:
     //SDL_Renderer* mLoadinigRenderer = NULL;
 
     //TextRender
-    TextRender* mTextRender = NULL;
+    //TextRender* mTextRender = NULL;
 
     bool mNeedLoading = true;
     LoadingPage* mLoadingPage = NULL;
-
     SDL_Thread* mLoadingThread = NULL;
-    DebugInfoBox* mDebugInfoBox = NULL;
-    //fps
-    int frameCount = 0;
-    Uint32 frameStart;
-    Text* mFpsText = NULL;
-    //mouse position
-    int mMouseX = 0;
-    int mMouseY = 0;
-    int mMouseSelectX = 0;
-    int mMouseSelectY = 0;
-    Text* mMousePosition = NULL;
-    Text* mMouseSelectPos = NULL;
-    Text* mStagePosition = NULL;
-    Text* mStageShow = NULL;
 
     GameStage* mGameStage = NULL;
 
@@ -59,19 +44,16 @@ public:
     bool start();
     //Starts up SDL and creates window
     bool init();
-
     //Loads media
-    bool initGameStage();
+    bool initGameEnv();
 
     bool calculateGameDate();
 
-    bool handleEvent(SDL_Event* e);
+    //bool handleEvent(SDL_Event* e);
 
     void update();
 
-    void calculateFps();
-
-    void updateDraw();
+    //void updateDraw();
     //刷新事件函数
     Uint32 timerCallBack();
     //Frees media and shuts down SDL

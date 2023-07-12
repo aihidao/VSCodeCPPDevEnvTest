@@ -16,7 +16,18 @@ int GameStage::BOTTOM_RIGHT_CELL_GRID_Y = 0;
 GameStage::GameStage(SDL_Renderer* renderer){
     mRenderer = renderer;
     mTextRender = new TextRender(renderer, 15, {0, 0, 0, 255});
-    //mTextRender->loadAssets(15, {0, 255, 0 , 255});
+
+	mDebugInfoBox = new DebugInfoBox(mRenderer);
+	mFpsText = new Text("UNDEFINED");
+	mMousePosition = new Text("UNDEFINED");
+	mMouseSelectPos = new Text("UNDEFINED");
+	mStagePosition = new Text("UNDEFINED");
+	mStageShow = new Text("UNDEFINED");
+	mDebugInfoBox->push(mFpsText);
+	mDebugInfoBox->push(mMousePosition);
+	mDebugInfoBox->push(mMouseSelectPos);
+	mDebugInfoBox->push(mStagePosition);
+	mDebugInfoBox->push(mStageShow);
 }
 
 void GameStage::initGrid(){
@@ -48,19 +59,62 @@ void GameStage::getShowGridInfo(){
 	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = GameStage::BOTTOM_RIGHT_CELL_GRID_Y < Game::MAP_HEIGHT ? GameStage::BOTTOM_RIGHT_CELL_GRID_Y : Game::MAP_HEIGHT;
 }
 
-void GameStage::handleEvent(SDL_Event* e){
-	if (e->type == SDL_MOUSEBUTTONDOWN) {
-		if (e->button.button == SDL_BUTTON_RIGHT) {
-			mouseDown(e);
-		}
-	}
-		else if (e->type == SDL_MOUSEMOTION) {
+bool GameStage::handleEvent(SDL_Event* e){
+	printf("envent:%s\n",e->type);
+	calculateFps();
+	bool quit = false;
+	while(SDL_PollEvent(e) != 0){
+		if (e->type == SDL_QUIT) {
+			printf("SDL_QUIT\n");
+			quit = true;
+		}else if (e->type == SDL_MOUSEBUTTONDOWN) {
+			printf("SDL_MOUSEBUTTONDOWN\n");
+			if (e->button.button == SDL_BUTTON_RIGHT) {
+				mouseDown(e);
+			}
+		}else if (e->type == SDL_MOUSEMOTION) {
+			printf("----------------");
+			SDL_GetMouseState(&mMouseX, &mMouseY);
+			std::string mousePosInfo = "Mouse Pos :(" + std::to_string(mMouseX) + "," + std::to_string(mMouseY) + ")";
+			mMousePosition->setStr(mousePosInfo);
+			std::string stagePosInfo = "Stage Pos :(" + std::to_string(GameStage::STAGE_POSITION_X) + "," + std::to_string(GameStage::STAGE_POSITION_Y) + ")";
+			mStagePosition->setStr(stagePosInfo);
+			std::string stageShowInfo = "Stage Show:(" + std::to_string(GameStage::TOP_LEFT_CELL_GRID_X) + "," + std::to_string(GameStage::TOP_LEFT_CELL_GRID_Y) + ") <-> (" + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_X) + "," + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_Y) + ")" ;
+			mStageShow->setStr(stageShowInfo);
+
+			SDL_Point realPos = GridCoordinateConverterUtils::convertToReal({mMouseX, mMouseY});
+			int posX = realPos.x / Game::CELL_SIZE_WIDTH;
+			int posY = realPos.y / Game::CELL_SIZE_HEIGHT;
+
+			std::string mouseSelectInfo = "Mouse Select Pos :(" + std::to_string(posX) + "," + std::to_string(posY) + ")";
+			mMouseSelectPos->setStr(mouseSelectInfo);
+
 			mouseMove(e);
+			}
+		else if (e->type == SDL_MOUSEBUTTONUP) {
+			printf("SDL_MOUSEBUTTONUP\n");
+			if (e->button.button == SDL_BUTTON_RIGHT) {
+				mouseUp(e);
+			}
+		}else{
+			printf("NOTHING:%s\n",e->type);
 		}
-	else if (e->type == SDL_MOUSEBUTTONUP) {
-		if (e->button.button == SDL_BUTTON_RIGHT) {
-			mouseUp(e);
-		}
+		mDebugInfoBox->handleEvent(e);
+	}
+	return quit;
+}
+
+void GameStage::calculateFps() {
+	frameCount++;
+	Uint32 frameTime = SDL_GetTicks() - frameStart;
+	if (frameTime > 25) {
+		float frameRate = 0.0f;
+		frameRate = frameCount / ((frameTime) / 1000.0f);
+		frameCount = 0;
+		//std::cout << "Current FPS: " << frameRate << std::endl;
+		frameStart = SDL_GetTicks();
+		std::string fpsInfo = "FPS:" + std::to_string(frameRate);
+		mFpsText->setStr(fpsInfo);
 	}
 }
 
@@ -91,6 +145,10 @@ void GameStage::mouseUp(SDL_Event* e) {
 }
 
 void GameStage::draw(){
+	SDL_SetRenderDrawColor(mRenderer, 153, 217, 234, 0xFF);
+	//Clear screen
+	SDL_RenderClear(mRenderer);
+
 	// for (int y = 0; y < Game::MAP_HEIGHT; y++) {
 	// 	for (int x = 0; x < Game::MAP_WIDTH; x++) {
 	// 		mCellArray[y * Game::MAP_WIDTH + x]->draw();
@@ -102,6 +160,9 @@ void GameStage::draw(){
 			mCellArray[y * Game::MAP_WIDTH + x]->draw();
 		}
 	}
+	mDebugInfoBox->draw();
+
+	SDL_RenderPresent(mRenderer);
 }
 
 GameStage::~GameStage(){
@@ -109,6 +170,12 @@ GameStage::~GameStage(){
 	for (int i = 0; i < Game::MAP_HEIGHT * Game::MAP_WIDTH; i++) {
 		delete mCellArray[i];
 	}
+	delete mFpsText;
+	delete mMousePosition;
+	delete mMouseSelectPos;
+	delete mStagePosition;
+	delete mStageShow;
+	delete mDebugInfoBox;
     delete[] mCellArray;
     delete mTextRender;
 }

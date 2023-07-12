@@ -32,6 +32,7 @@ void LoadingPage::draw(){
     SDL_RenderDrawRect(mRenderer, &rectFill);
     mLoadingInfo->setStr("Need loading:" + std::to_string(Game::initProgress) + "/" + std::to_string(Game::MAP_WIDTH * Game::MAP_HEIGHT));
     mTextRender->drawString(mLoadingInfo->getStr(),100,100);
+    
     //Update screen
 	SDL_RenderPresent(mRenderer);
 

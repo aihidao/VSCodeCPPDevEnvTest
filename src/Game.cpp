@@ -49,10 +49,9 @@ bool Game::start() {
 	}
 	else
 	{
-		initGameStage();
+		initGameEnv();
 		mLoadingThread = SDL_CreateThread(loading, "Test", this);
 		SDL_DetachThread(mLoadingThread);
-		//SDL_WaitThread(thread, NULL);
 		update();
 	}
 
@@ -61,22 +60,12 @@ bool Game::start() {
 	return true;
 }
 
-bool Game::initGameStage(){
-		//Load media
-		mLoadingPage = new LoadingPage(mRenderer);
-		mTextRender = new TextRender(mRenderer, 15, {0, 255, 0, 255});
-		mDebugInfoBox = new DebugInfoBox(mRenderer);
-		mFpsText = new Text("UNDEFINED");
-		mMousePosition = new Text("UNDEFINED");
-		mMouseSelectPos = new Text("UNDEFINED");
-		mStagePosition = new Text("UNDEFINED");
-		mStageShow = new Text("UNDEFINED");
-		mDebugInfoBox->push(mFpsText);
-		mDebugInfoBox->push(mMousePosition);
-		mDebugInfoBox->push(mMouseSelectPos);
-		mDebugInfoBox->push(mStagePosition);
-		mDebugInfoBox->push(mStageShow);
-		mGameStage = new GameStage(mRenderer);
+bool Game::initGameEnv(){
+	//Load media
+	mLoadingPage = new LoadingPage(mRenderer);
+	//mTextRender = new TextRender(mRenderer, 15, {0, 255, 0, 255});
+	mGameStage = new GameStage(mRenderer);
+	return true;
 }
 
 bool Game::calculateGameDate()
@@ -89,44 +78,19 @@ bool Game::calculateGameDate()
 	return success;
 }
 
-bool Game::handleEvent(SDL_Event* e)
-{
-	bool quit = false;
-	while (SDL_PollEvent(e) != 0)
-	{
-		//User requests quit
-		if (e->type == SDL_QUIT) {
-			quit = true;
-		}else if (e->type == SDL_USEREVENT) {
-			//updateDraw();
-		}
-		else if (e->type == SDL_MOUSEMOTION) {
-			SDL_GetMouseState(&mMouseX, &mMouseY);
-			std::string mousePosInfo = "Mouse Pos :(" + std::to_string(mMouseX) + "," + std::to_string(mMouseY) + ")";
-			mMousePosition->setStr(mousePosInfo);
-			std::string stagePosInfo = "Stage Pos :(" + std::to_string(GameStage::STAGE_POSITION_X) + "," + std::to_string(GameStage::STAGE_POSITION_Y) + ")";
-			mStagePosition->setStr(stagePosInfo);
-			std::string stageShowInfo = "Stage Show:(" + std::to_string(GameStage::TOP_LEFT_CELL_GRID_X) + "," + std::to_string(GameStage::TOP_LEFT_CELL_GRID_Y) + ") <-> (" + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_X) + "," + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_Y) + ")" ;
-			mStageShow->setStr(stageShowInfo);
-
-			SDL_Point realPos = GridCoordinateConverterUtils::convertToReal({mMouseX, mMouseY});
-			int posX = realPos.x / Game::CELL_SIZE_WIDTH;
-			int posY = realPos.y / Game::CELL_SIZE_HEIGHT;
-
-			std::string mouseSelectInfo = "Mouse Select Pos :(" + std::to_string(posX) + "," + std::to_string(posY) + ")";
-			mMouseSelectPos->setStr(mouseSelectInfo);
-		}
-		else if (e->type == SDL_MOUSEBUTTONDOWN) {
-			
-		}
-		else if (e->type == SDL_MOUSEBUTTONUP) {
-
-		}
-		mGameStage->handleEvent(e);
-		mDebugInfoBox->handleEvent(e);
-	}
-	return quit;
-}
+// bool Game::handleEvent(SDL_Event* e)
+// {
+// 	bool quit = false;
+// 	while (SDL_PollEvent(e) != 0)
+// 	{
+// 		//User requests quit
+// 		if (e->type == SDL_QUIT) {
+// 			quit = true;
+// 		}
+// 		mGameStage->handleEvent(e);
+// 	}
+// 	return quit;
+// }
 
 void Game::update() {
 	//Main loop flag
@@ -141,11 +105,11 @@ void Game::update() {
 		{
 			if(!mNeedLoading){
 				//Handle events on queue
-				quit = handleEvent(&e);
-				calculateFps();
-				updateDraw();
+				quit = mGameStage->handleEvent(&e);
+				mGameStage->draw();
+
 			}else{
-				mLoadingPage->handleEvent(&e);
+				quit = mLoadingPage->handleEvent(&e);
 				mLoadingPage->draw();
 			}
 		}
@@ -157,34 +121,16 @@ void Game::update() {
 	}
 }
 
-void Game::updateDraw() {
-	SDL_SetRenderDrawColor(mRenderer, 153, 217, 234, 0xFF);
-	//Clear screen
-	SDL_RenderClear(mRenderer);
+// void Game::updateDraw() {
+// 	SDL_SetRenderDrawColor(mRenderer, 153, 217, 234, 0xFF);
+// 	//Clear screen
+// 	SDL_RenderClear(mRenderer);
 
-	mGameStage->draw();
+// 	mGameStage->draw();
 
-	mDebugInfoBox->draw();
-
-	//Update screen
-	SDL_RenderPresent(mRenderer);
-}
-
-
-void Game::calculateFps() {
-	
-	frameCount++;
-	Uint32 frameTime = SDL_GetTicks() - frameStart;
-	if (frameTime > 25) {
-		float frameRate = 0.0f;
-		frameRate = frameCount / ((frameTime) / 1000.0f);
-		frameCount = 0;
-		//std::cout << "Current FPS: " << frameRate << std::endl;
-		frameStart = SDL_GetTicks();
-		std::string fpsInfo = "FPS:" + std::to_string(frameRate);
-		mFpsText->setStr(fpsInfo);
-	}
-}
+// 	//Update screen
+// 	SDL_RenderPresent(mRenderer);
+// }
 
 bool Game::init()
 {
@@ -250,13 +196,8 @@ bool Game::init()
 void Game::close()
 {
 	delete mLoadingPage;
-	delete mTextRender;
-	delete mFpsText;
-	delete mMousePosition;
-	delete mMouseSelectPos;
-	delete mStagePosition;
-	delete mStageShow;
-	delete mDebugInfoBox;
+	// delete mTextRender;
+
 	delete mGameStage;
 	//Destroy window
 	//SDL_DestroyRenderer(mLoadinigRenderer);
