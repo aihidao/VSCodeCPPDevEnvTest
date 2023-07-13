@@ -22,7 +22,7 @@
         {
           "label" : "recmake - windows",
           "type" : "shell",
-          "command" : "del /q * && for /d %i in (*) do rd /s /q \"%i\" && cmake -G \"MinGW Makefiles\" -DCMAKE_BUILD_TYPE=Debug  ..",
+          "command" : "del /q * && for /d %i in (*) do rd /s /q \"%i\" && cmake -G \"MinGW Makefiles\" -DCMAKE_BUILD_TYPE=Debug  .. && make clean && make",
           "options" : {
               "cwd" : "${workspaceFolder}/build"
           },
