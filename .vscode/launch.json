@@ -16,6 +16,20 @@
         "preLaunchTask": "make - windows"
       },
       {
+        "name": "Recmake - windows",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/bin/helloSLAM.exe",
+        "args": [],
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}",
+        "environment": [],
+        "externalConsole": true,
+        "MIMode": "gdb",
+        "miDebuggerPath": "D:/Program Files/MinGW/bin/gdb.exe",
+        "preLaunchTask": "recmake - windows"
+      },
+      {
         "name": "Debug - macos",
         "type": "cppdbg",
         "request": "launch",

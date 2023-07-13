@@ -20,6 +20,24 @@
               }
         },
         {
+          "label" : "recmake - windows",
+          "type" : "shell",
+          "command" : "del /q * && for /d %i in (*) do rd /s /q \"%i\" && cmake -G \"MinGW Makefiles\" -DCMAKE_BUILD_TYPE=Debug  ..",
+          "options" : {
+              "cwd" : "${workspaceFolder}/build"
+          },
+          "presentation": {
+              "echo": true,
+              "reveal": "always",
+              "focus": false,
+              "panel": "shared"
+            },
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            }
+      },
+        {
           "label" : "make - macos",
           "type" : "shell",
           "command" : "make clean && make",
