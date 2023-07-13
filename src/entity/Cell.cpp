@@ -39,11 +39,31 @@ void Cell::draw(){
         {p3.x + GameStage::STAGE_POSITION_X, p3.y + GameStage::STAGE_POSITION_Y},
         {p4.x + GameStage::STAGE_POSITION_X, p4.y + GameStage::STAGE_POSITION_Y},
         {p1.x + GameStage::STAGE_POSITION_X, p1.y + GameStage::STAGE_POSITION_Y}
-        };
+    };
+    // 设置颜色
+    SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
+
+    SDL_Color groudColor = {255, 255, 0, 255};
+    const std::vector< SDL_Vertex > gourdRightVert =
+    {
+        { SDL_FPoint{ (float)points[1].x, (float)points[1].y}, groudColor, SDL_FPoint{ 0 }, },
+        { SDL_FPoint{ (float)points[2].x, (float)points[2].y}, groudColor, SDL_FPoint{ 0 }, },
+        { SDL_FPoint{ (float)points[3].x, (float)points[3].y}, groudColor, SDL_FPoint{ 0 }, },
+    };
+    SDL_RenderGeometry( mRenderer, nullptr, gourdRightVert.data(), gourdRightVert.size(), nullptr, 0 );
+        const std::vector< SDL_Vertex > gourdLeftVert =
+    {
+        { SDL_FPoint{ (float)points[1].x, (float)points[1].y}, groudColor, SDL_FPoint{ 0 }, },
+        { SDL_FPoint{ (float)points[4].x, (float)points[4].y}, groudColor, SDL_FPoint{ 0 }, },
+        { SDL_FPoint{ (float)points[3].x, (float)points[3].y}, groudColor, SDL_FPoint{ 0 }, },
+    };
+    SDL_RenderGeometry( mRenderer, nullptr, gourdLeftVert.data(), gourdLeftVert.size(), nullptr, 0 );
+
     SDL_SetRenderDrawColor(mRenderer, 0xff, 0x00, 0x00, 0xff);
-	SDL_RenderDrawLines(mRenderer, points, 5);
+    SDL_RenderDrawLines(mRenderer, points, 5);
     mTextRender->drawText(mText, GameStage::STAGE_POSITION_X + readPos.x, GameStage::STAGE_POSITION_Y + readPos.y + Game::CELL_SIZE_HEIGHT / 2, TextRender::RENDER_TYPE_CENTER);
-}
+    }
+
 
 Cell::~Cell(){
     delete mText;
