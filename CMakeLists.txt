@@ -1,5 +1,5 @@
 #z最低cmake版本
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.12)
 #项目名称
 project(HelloSLAM)
 
