@@ -40,8 +40,8 @@ void GameStage::initGrid(){
 }
 
 void GameStage::getShowGridInfo(){
-	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({ (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE, (- 300) / GameStage::GAME_MAP_SCALE});
-	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE, (Game::SCREEN_HEIGHT  + 300) / GameStage::GAME_MAP_SCALE});
+	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({static_cast<int>( (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE),static_cast<int>((- 300) / GameStage::GAME_MAP_SCALE)});
+	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ static_cast<int>((Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE), static_cast<int>((Game::SCREEN_HEIGHT  + 300) / GameStage::GAME_MAP_SCALE)});
 
 	GameStage::TOP_LEFT_CELL_GRID_X = realTopLeft.x / Game::CELL_SIZE_WIDTH;
 	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X >= 0 ? GameStage::TOP_LEFT_CELL_GRID_X : 0;
