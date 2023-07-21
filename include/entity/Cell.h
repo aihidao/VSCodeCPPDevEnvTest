@@ -17,6 +17,7 @@ class Cell{
         Cell();
         Cell(SDL_Renderer* renderer,TextRender *textRender,int x,int y,int type);
         void draw();
+        void drawCellInfo();
         SDL_Color getGroudColor(double altitude);
         ~Cell();
 };

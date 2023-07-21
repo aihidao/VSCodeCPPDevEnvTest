@@ -9,6 +9,7 @@ class GameStage{
     public:
         static int STAGE_POSITION_X;
         static int STAGE_POSITION_Y;
+        static double GAME_MAP_SCALE;
         static int STAGE_SHOW_LOCAL_X;
         static int STAGE_SHOW_LOCAL_Y;
 

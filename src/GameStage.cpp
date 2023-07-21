@@ -4,6 +4,7 @@
 #include "GridCoordinateConverterUtils.h"
 int GameStage::STAGE_POSITION_X = 0;
 int GameStage::STAGE_POSITION_Y = 0;
+double GameStage::GAME_MAP_SCALE = 0.1;
 int GameStage::STAGE_SHOW_LOCAL_X = 0;
 int GameStage::STAGE_SHOW_LOCAL_Y = 0;
 int GameStage::SELECT_LOCAL_X = 0;
@@ -39,8 +40,8 @@ void GameStage::initGrid(){
 }
 
 void GameStage::getShowGridInfo(){
-	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({ Game::SCREEN_WIDTH / 2, - 300});
-	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT  + 300});
+	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({ (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE, (- 300) / GameStage::GAME_MAP_SCALE});
+	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE, (Game::SCREEN_HEIGHT  + 300) / GameStage::GAME_MAP_SCALE});
 
 	GameStage::TOP_LEFT_CELL_GRID_X = realTopLeft.x / Game::CELL_SIZE_WIDTH;
 	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X >= 0 ? GameStage::TOP_LEFT_CELL_GRID_X : 0;
@@ -91,6 +92,29 @@ bool GameStage::handleEvent(SDL_Event* e){
 			if (e->button.button == SDL_BUTTON_RIGHT) {
 				mouseUp(e);
 			}
+		} else if (e->type == SDL_MOUSEWHEEL) {
+			int x = e->wheel.x; // 水平方向的滚动量
+        	int y = e->wheel.y; // 垂直方向的滚动量
+			// 根据滚动量执行相应操作
+			if (y > 0) {
+				// 向上滚动
+				// 处理滚轮向上滚动的事件
+				if(GameStage::GAME_MAP_SCALE + 0.1 <= 1.0){
+					GameStage::GAME_MAP_SCALE += 0.1;
+				}else{
+					GameStage::GAME_MAP_SCALE = 1.0;
+				}
+				
+			} else if (y < 0) {
+				// 向下滚动
+				// 处理滚轮向下滚动的事件
+				if(GameStage::GAME_MAP_SCALE - 0.1 >= 0.1){
+					GameStage::GAME_MAP_SCALE -= 0.1;
+				}else{
+					GameStage::GAME_MAP_SCALE = 0.1;
+				}
+			}
+			getShowGridInfo();
 		}else{
 			
 		}
@@ -122,8 +146,8 @@ void GameStage::mouseDown(SDL_Event* e) {
 void GameStage::mouseMove(SDL_Event* e) {
 
 	if (mIsMove) {
-		GameStage::STAGE_POSITION_X += e->motion.xrel;
-		GameStage::STAGE_POSITION_Y += e->motion.yrel;
+		GameStage::STAGE_POSITION_X += e->motion.xrel / GameStage::GAME_MAP_SCALE;
+		GameStage::STAGE_POSITION_Y += e->motion.yrel / GameStage::GAME_MAP_SCALE;
 
 		getShowGridInfo();
 	}
@@ -153,6 +177,12 @@ void GameStage::draw(){
 	for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
 		for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
 			mCellArray[y * Game::MAP_WIDTH + x]->draw();
+		}
+	}
+
+	for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
+		for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
+			mCellArray[y * Game::MAP_WIDTH + x]->drawCellInfo();
 		}
 	}
 	mDebugInfoBox->draw();
