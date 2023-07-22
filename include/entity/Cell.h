@@ -8,7 +8,7 @@ class Cell{
         int mLocalX = 0;
         int mLocalY = 0;
         int mType = 0;
-        int altitude = 0;
+        int mAltitude = 0;
         //Text* mText = NULL;
         Text* mText = NULL;
         SDL_Renderer* mRenderer = NULL;
@@ -18,7 +18,7 @@ class Cell{
         Cell(SDL_Renderer* renderer,TextRender *textRender,int x,int y,int type);
         void draw();
         void drawCellInfo();
-        SDL_Color getGroudColor(double altitude);
+        SDL_Color getGroudColor(int altitude);
         ~Cell();
 };
 #endif

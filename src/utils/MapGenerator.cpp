@@ -72,5 +72,8 @@ double MapGererator::perlinNoise(double x, double y, double z) {
     #undef lerp
     #undef grad
 
-    return result;
+    double result_0_to_minus_1 = (result + 1.0) / 2.0; // Scale from (-1 to 1) to (0 to 1)
+    result_0_to_minus_1 = 1.0 - result_0_to_minus_1; 
+
+    return result_0_to_minus_1;
 }
