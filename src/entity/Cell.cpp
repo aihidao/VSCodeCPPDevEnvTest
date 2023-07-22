@@ -20,13 +20,20 @@ Cell::Cell(SDL_Renderer* renderer, TextRender *textRender, int x, int y, int typ
     mType = type;
     double scale = 0.05;
     //printf("noise:%f\n",MapGererator::perlinNoise(x * scale, y * scale, 0.0));
-    mAltitude = std::round(MapGererator::perlinNoise(x * scale, y * scale, 0) * 200) - 100;
+    //mAltitude = std::round(MapGererator::perlinNoise(x * scale,  y * scale, 0.0) * 200.0) - 100;
     // printf("noise:%f\n",MapGererator::perlinNoise(x * scale, y * scale, 0.0));
     // printf("noise:%d\n", mAltitude);
-    std::string positionInfo = "(" + std::to_string(mLocalX) + "," + std::to_string(mLocalY) + "," + std::to_string(mAltitude) + ")";
+    //std::string positionInfo = "(" + std::to_string(mLocalX) + "," + std::to_string(mLocalY) + "," + std::to_string(mAltitude) + ")";
+    std::string positionInfo = "( undefine )";
     //printf("init info:%s\n",positionInfo.c_str());
     mText = new Text(positionInfo.c_str());
     //mText->setStr(positionInfo);
+}
+
+void Cell::setAltitude(int altitude){
+    mAltitude = altitude;
+    std::string positionInfo = "(" + std::to_string(mAltitude) + ")";
+    mText->setStr(positionInfo);
 }
 
 void Cell::draw(){
@@ -35,29 +42,26 @@ void Cell::draw(){
 
     SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({gridX, gridY});
 
+    int landAltitude = mAltitude > 0 ? mAltitude : 0;
+    SDL_Color groudColor = getGroudColor(mAltitude);
+
+
     SDL_Point p1 = (GridCoordinateConverterUtils::convertToDraw({gridX + 0, gridY + 0}));
     SDL_Point p2 = (GridCoordinateConverterUtils::convertToDraw({gridX + Game::CELL_SIZE_WIDTH, gridY + 0}));
     SDL_Point p3 = (GridCoordinateConverterUtils::convertToDraw({gridX + Game::CELL_SIZE_WIDTH, gridY + Game::CELL_SIZE_HEIGHT}));
     SDL_Point p4 = (GridCoordinateConverterUtils::convertToDraw({gridX + 0, gridY + Game::CELL_SIZE_HEIGHT}));
-	// SDL_Point points[] = { 
-    //     {p1.x + GameStage::STAGE_POSITION_X, p1.y + GameStage::STAGE_POSITION_Y},
-    //     {p2.x + GameStage::STAGE_POSITION_X, p2.y + GameStage::STAGE_POSITION_Y},
-    //     {p3.x + GameStage::STAGE_POSITION_X, p3.y + GameStage::STAGE_POSITION_Y},
-    //     {p4.x + GameStage::STAGE_POSITION_X, p4.y + GameStage::STAGE_POSITION_Y},
-    //     {p1.x + GameStage::STAGE_POSITION_X, p1.y + GameStage::STAGE_POSITION_Y}
-    // };
 
     SDL_Point points[] = { 
-        {static_cast<int>((p1.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p1.y + GameStage::STAGE_POSITION_Y) * GameStage::GAME_MAP_SCALE)},
-        {static_cast<int>((p2.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p2.y + GameStage::STAGE_POSITION_Y) * GameStage::GAME_MAP_SCALE)},
-        {static_cast<int>((p3.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p3.y + GameStage::STAGE_POSITION_Y) * GameStage::GAME_MAP_SCALE)},
-        {static_cast<int>((p4.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p4.y + GameStage::STAGE_POSITION_Y) * GameStage::GAME_MAP_SCALE)},
-        {static_cast<int>((p1.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p1.y + GameStage::STAGE_POSITION_Y) * GameStage::GAME_MAP_SCALE)}
+        {static_cast<int>((p1.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p1.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+        {static_cast<int>((p2.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p2.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+        {static_cast<int>((p3.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p3.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+        {static_cast<int>((p4.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p4.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+        {static_cast<int>((p1.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p1.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)}
     };
     // 设置颜色
     SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
 
-    SDL_Color groudColor = getGroudColor(mAltitude);
+
     const std::vector< SDL_Vertex > gourdRightVert =
     {
         { SDL_FPoint{ (float)points[1].x, (float)points[1].y}, groudColor, SDL_FPoint{ 0 }, },
@@ -65,7 +69,7 @@ void Cell::draw(){
         { SDL_FPoint{ (float)points[3].x, (float)points[3].y}, groudColor, SDL_FPoint{ 0 }, },
     };
     SDL_RenderGeometry( mRenderer, nullptr, gourdRightVert.data(), gourdRightVert.size(), nullptr, 0 );
-        const std::vector< SDL_Vertex > gourdLeftVert =
+    const std::vector< SDL_Vertex > gourdLeftVert =
     {
         { SDL_FPoint{ (float)points[1].x, (float)points[1].y}, groudColor, SDL_FPoint{ 0 }, },
         { SDL_FPoint{ (float)points[4].x, (float)points[4].y}, groudColor, SDL_FPoint{ 0 }, },
@@ -73,6 +77,18 @@ void Cell::draw(){
     };
     SDL_RenderGeometry( mRenderer, nullptr, gourdLeftVert.data(), gourdLeftVert.size(), nullptr, 0 );
 
+    if(mAltitude > 0){
+        SDL_Point linePoints[] = { 
+            {static_cast<int>((p4.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p4.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+            {static_cast<int>((p1.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p1.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+            {static_cast<int>((p2.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p2.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
+        };
+
+        SDL_SetRenderDrawColor(mRenderer, 142, 64, 54, 128);
+        SDL_RenderDrawLines(mRenderer, linePoints, 3);
+        // SDL_RenderDrawLine(mRenderer, p1.x p1.y, p2.x, p2.y);
+        // SDL_RenderDrawLine(mRenderer, p1.x p1.y, p4.x, p4.y);
+    }
 
 }
 
@@ -102,11 +118,12 @@ void Cell::drawCellInfo(){
     //     {(p1.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE, (p1.y + GameStage::STAGE_POSITION_Y) * GameStage::GAME_MAP_SCALE}
     // };
 
-    if(mLocalX % 50 == 0 && mLocalY % 50 == 0){
-        // SDL_SetRenderDrawColor(mRenderer, 0xff, 0x00, 0x00, 0xff);
+    //if(mLocalX % 50 == 0 && mLocalY % 50 == 0){
+        //SDL_SetRenderDrawColor(mRenderer, 0xff, 0x00, 0x00, 0xff);
         // SDL_RenderDrawLines(mRenderer, points, 5);
-        mTextRender->drawText(mText, GameStage::GAME_MAP_SCALE * (GameStage::STAGE_POSITION_X + readPos.x), GameStage::GAME_MAP_SCALE * (GameStage::STAGE_POSITION_Y + readPos.y + Game::CELL_SIZE_HEIGHT / 2), TextRender::RENDER_TYPE_CENTER);
-    }
+        //mTextRender->drawText(mText, GameStage::GAME_MAP_SCALE * (GameStage::STAGE_POSITION_X + readPos.x), GameStage::GAME_MAP_SCALE * (GameStage::STAGE_POSITION_Y + readPos.y + Game::CELL_SIZE_HEIGHT / 2), TextRender::RENDER_TYPE_CENTER);
+        //mTextRender->drawText(mText, GameStage::GAME_MAP_SCALE * (GameStage::STAGE_POSITION_X + readPos.x), GameStage::GAME_MAP_SCALE * (GameStage::STAGE_POSITION_Y + readPos.y + Game::CELL_SIZE_HEIGHT / 2), TextRender::RENDER_TYPE_CENTER);
+    //}
 }
 
 

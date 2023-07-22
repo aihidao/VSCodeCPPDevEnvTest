@@ -4,12 +4,15 @@
 #include <vector>
 #include <cmath>
 
-class MapGererator {
+class MapGenerator {
     public:
-        int** altitudeMap = NULL;
+        int* mAltitudeMap = NULL;
+        int mWidth = 0;
+        int mHeight = 0;
         static double perlinNoise(double x, double y, double z);
-    private:
-        MapGererator(int width, int height, int seed);
+        MapGenerator(int width, int height, int seed);
+        void addOctaves(double scale);
+        ~MapGenerator();
 };
 
 

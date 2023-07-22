@@ -1,19 +1,69 @@
 #include "MapGenerator.h"
-MapGererator::MapGererator(int width,int height,int seed) {
+MapGenerator::MapGenerator(int width,int height,int seed) {
     // TODO
-    altitudeMap = new int*[width];
-    for (int i = 0; i < width; i++) {
-        altitudeMap[i] = new int[height];
-    }
-    for (int i = 0; i < width; i++) {
-        for (int j = 0;j < height; j++) {
-            altitudeMap[i][j] = MapGererator::perlinNoise(i, j, 0) * 100;
+    // mAltitudeMap = new int*[width];
+    // for (int i = 0; i < width; i++) {
+    //     mAltitudeMap[i] = new int[height];
+    // }
+    mWidth = width;
+    mHeight = height;
+    mAltitudeMap = new int[mWidth * mHeight];
+
+    addOctaves(0.05);
+    addOctaves(0.005);
+    // double scale = 0.05;
+    // for (int i = 0; i < width; i++) {
+    //     for (int j = 0;j < height; j++) {
+    //         mAltitudeMap[i][j] = std::round(MapGenerator::perlinNoise(i * scale, j * scale, 0)  * 200.0) - 100;
+    //     }
+    // }
+
+    // double scale2 = 0.005;
+    // for (int i = 0; i < width; i++) {
+    //     for (int j = 0;j < height; j++) {
+    //         mAltitudeMap[i][j] += std::round(MapGenerator::perlinNoise(i * scale2, j * scale2, 0)  * 200.0) - 100;
+    //         if(mAltitudeMap[i][j] < -100){
+    //             mAltitudeMap[i][j] = -100;
+    //         }
+
+    //         if(mAltitudeMap[i][j] > 100){
+    //             mAltitudeMap[i][j] = 100;
+    //         }
+    //     }
+    // }
+}
+
+void MapGenerator::addOctaves(double scale) {
+    // TODO
+    // for (int i = 0; i < mWidth * mHeight; i++) {
+    //     for (int j = 0;j < height; j++) {
+    //         mAltitudeMap[i][j] += std::round(MapGenerator::perlinNoise(i * scale, j * scale, 0)  * 200.0) - 100;
+    //         if(mAltitudeMap[i][j] < -100){
+    //             mAltitudeMap[i][j] = -100;
+    //         }
+
+    //         if(mAltitudeMap[i][j] > 100){
+    //             mAltitudeMap[i][j] = 100;
+    //         }
+    //     }
+    // }
+
+    for (int i = 0; i < mWidth * mHeight; i++) {
+        int gridX = i % mWidth;
+		int gridY = i / mWidth;
+        mAltitudeMap[i] += std::round(MapGenerator::perlinNoise(gridX * scale, gridY * scale, 0)  * 200.0) - 100;
+        if(mAltitudeMap[i] < -100){
+            mAltitudeMap[i] = -100;
+        }
+
+        if(mAltitudeMap[i] > 100){
+            mAltitudeMap[i] = 100;
         }
     }
 }
 
 // 生成柏林噪声
-double MapGererator::perlinNoise(double x, double y, double z) {
+double MapGenerator::perlinNoise(double x, double y, double z) {
     int p[512];
     int permutation[] = {
         151, 160, 137, 91, 90, 15, 131, 13, 201, 95, 96, 53, 194, 233, 7, 225, 140, 36, 103, 30, 
@@ -66,14 +116,19 @@ double MapGererator::perlinNoise(double x, double y, double z) {
             lerp(u, grad(p[AA + 1], x, y, z - 1), grad(p[BA + 1], x - 1, y, z - 1)),
             lerp(u, grad(p[AB + 1], x, y - 1, z - 1), grad(p[BB + 1], x - 1, y - 1, z - 1))
         )
-    );
+    ) / 2.0 + 0.5;
 
-    #undef fade
-    #undef lerp
-    #undef grad
+    //#undef fade
+    //#undef lerp
+    //#undef grad
 
-    double result_0_to_minus_1 = (result + 1.0) / 2.0; // Scale from (-1 to 1) to (0 to 1)
-    result_0_to_minus_1 = 1.0 - result_0_to_minus_1; 
+    // double result_0_to_minus_1 = (result + 1.0) / 2.0; // Scale from (-1 to 1) to (0 to 1)
+    // result_0_to_minus_1 = 1.0 - result_0_to_minus_1; 
 
-    return result_0_to_minus_1;
+    return result;
+}
+
+MapGenerator::~MapGenerator() {
+    // TODO
+    delete mAltitudeMap;
 }

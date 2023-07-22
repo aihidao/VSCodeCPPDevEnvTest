@@ -1,10 +1,11 @@
 #include "Game.h"
 #include "GameStage.h"
+#include "MapGenerator.h"
 #include <cmath>
 #include "GridCoordinateConverterUtils.h"
 int GameStage::STAGE_POSITION_X = 0;
 int GameStage::STAGE_POSITION_Y = 0;
-double GameStage::GAME_MAP_SCALE = 0.1;
+double GameStage::GAME_MAP_SCALE = 1;
 int GameStage::STAGE_SHOW_LOCAL_X = 0;
 int GameStage::STAGE_SHOW_LOCAL_Y = 0;
 int GameStage::SELECT_LOCAL_X = 0;
@@ -33,10 +34,17 @@ GameStage::GameStage(SDL_Renderer* renderer){
 
 void GameStage::initGrid(){
 	mCellArray = new Cell* [Game::MAP_HEIGHT * Game::MAP_WIDTH];
+	MapGenerator mapGenerator = MapGenerator(Game::MAP_WIDTH, Game::MAP_HEIGHT, 0);
 	for (int i = 0; i < Game::MAP_HEIGHT  * Game::MAP_WIDTH; i++) {
 		++Game::initProgress;
-		mCellArray[i] = new Cell(mRenderer,mTextRender,i % Game::MAP_WIDTH,i / Game::MAP_WIDTH,0);
+		int gridX = i % Game::MAP_WIDTH;
+		int gridY = i / Game::MAP_WIDTH;
+		int altitude = mapGenerator.mAltitudeMap[i];
+		mCellArray[i] = new Cell(mRenderer,mTextRender, gridX, gridY,0);
+		mCellArray[i]->setAltitude(altitude);
 	}
+
+	//delete mapGenerator;
 }
 
 void GameStage::getShowGridInfo(){

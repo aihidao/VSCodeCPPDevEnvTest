@@ -12,8 +12,8 @@ and may not be redistributed without written permission.*/
 #include <Game.h>
 #include <thread>
 #include "GridCoordinateConverterUtils.h"
-int	Game::SCREEN_WIDTH = 800;
-int	Game::SCREEN_HEIGHT = 600;
+int	Game::SCREEN_WIDTH = 1024;
+int	Game::SCREEN_HEIGHT = 768;
 
 int	Game::MAP_WIDTH = 500;
 int	Game::MAP_HEIGHT = 500;

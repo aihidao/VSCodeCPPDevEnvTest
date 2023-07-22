@@ -16,6 +16,7 @@ class Cell{
     public:
         Cell();
         Cell(SDL_Renderer* renderer,TextRender *textRender,int x,int y,int type);
+        void setAltitude(int mAltitude);
         void draw();
         void drawCellInfo();
         SDL_Color getGroudColor(int altitude);
