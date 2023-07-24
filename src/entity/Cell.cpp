@@ -84,6 +84,7 @@ void Cell::draw(){
             {static_cast<int>((p2.x + GameStage::STAGE_POSITION_X) * GameStage::GAME_MAP_SCALE), static_cast<int>((p2.y + GameStage::STAGE_POSITION_Y - landAltitude) * GameStage::GAME_MAP_SCALE)},
         };
 
+
         SDL_SetRenderDrawColor(mRenderer, 142, 64, 54, 128);
         SDL_RenderDrawLines(mRenderer, linePoints, 3);
         // SDL_RenderDrawLine(mRenderer, p1.x p1.y, p2.x, p2.y);

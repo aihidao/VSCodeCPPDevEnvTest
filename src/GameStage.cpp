@@ -103,7 +103,10 @@ bool GameStage::handleEvent(SDL_Event* e){
 		} else if (e->type == SDL_MOUSEWHEEL) {
 			int x = e->wheel.x; // 水平方向的滚动量
         	int y = e->wheel.y; // 垂直方向的滚动量
+			int mouseX, mouseY;
+        	Uint32 buttonState = SDL_GetMouseState(&mouseX, &mouseY);
 			// 根据滚动量执行相应操作
+			double oldScale = GameStage::GAME_MAP_SCALE;
 			if (y > 0) {
 				// 向上滚动
 				// 处理滚轮向上滚动的事件
@@ -112,7 +115,6 @@ bool GameStage::handleEvent(SDL_Event* e){
 				}else{
 					GameStage::GAME_MAP_SCALE = 1.0;
 				}
-				
 			} else if (y < 0) {
 				// 向下滚动
 				// 处理滚轮向下滚动的事件
@@ -122,6 +124,15 @@ bool GameStage::handleEvent(SDL_Event* e){
 					GameStage::GAME_MAP_SCALE = 0.1;
 				}
 			}
+
+			if(std::abs(oldScale - GameStage::GAME_MAP_SCALE) > 1e-9){
+				//int transX = (mouseX - mouseY);
+    			//int transY = (mouseX + mouseY) / 2;
+				//std::cout << std::round(((GameStage::GAME_MAP_SCALE / oldScale) * (mouseX - GameStage::STAGE_POSITION_X)) - mouseX + GameStage::STAGE_POSITION_X) ;
+				GameStage::STAGE_POSITION_X -= std::round(((GameStage::GAME_MAP_SCALE/oldScale - 1) * (mouseX))) / GameStage::GAME_MAP_SCALE;
+				GameStage::STAGE_POSITION_Y -= std::round(((GameStage::GAME_MAP_SCALE/oldScale - 1) * (mouseY))) / GameStage::GAME_MAP_SCALE;
+			}
+
 			getShowGridInfo();
 		}else{
 			
