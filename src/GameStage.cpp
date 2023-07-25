@@ -41,6 +41,15 @@ void GameStage::initGrid(){
 		int gridY = i / Game::MAP_WIDTH;
 		int altitude = mapGenerator.mAltitudeMap[i];
 		mCellArray[i] = new Cell(mRenderer,mTextRender, gridX, gridY,0);
+		if(gridX > 0){
+			mCellArray[i]->leftCell = mCellArray[i - 1];
+			mCellArray[i - 1]->rightCell = mCellArray[i];
+		}
+
+		if(gridY > 0){
+			mCellArray[i]->upCell = mCellArray[i - Game::MAP_WIDTH];
+			mCellArray[i - Game::MAP_WIDTH]->downCell = mCellArray[i];
+		}
 		mCellArray[i]->setAltitude(altitude);
 	}
 
@@ -183,7 +192,7 @@ void GameStage::mouseUp(SDL_Event* e) {
 }
 
 void GameStage::draw(){
-	SDL_SetRenderDrawColor(mRenderer, 153, 217, 234, 0xFF);
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
 	//Clear screen
 	SDL_RenderClear(mRenderer);
 

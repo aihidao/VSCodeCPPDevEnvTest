@@ -4,6 +4,11 @@
 #include "Text.h"
 #include "TextRender.h"
 class Cell{
+    public:
+        Cell* leftCell = NULL;
+        Cell* rightCell = NULL;
+        Cell* upCell = NULL;
+        Cell* downCell = NULL;
     private:
         int mLocalX = 0;
         int mLocalY = 0;
