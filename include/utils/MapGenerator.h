@@ -12,6 +12,8 @@ class MapGenerator {
         static double perlinNoise(double x, double y, double z);
         MapGenerator(int width, int height, int seed);
         void addOctaves(double scale);
+        void flat();
+        int getAltitude(int x, int y);
         ~MapGenerator();
 };
 

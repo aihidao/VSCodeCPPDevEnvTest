@@ -11,43 +11,10 @@ MapGenerator::MapGenerator(int width,int height,int seed) {
 
     addOctaves(0.05);
     addOctaves(0.005);
-    // double scale = 0.05;
-    // for (int i = 0; i < width; i++) {
-    //     for (int j = 0;j < height; j++) {
-    //         mAltitudeMap[i][j] = std::round(MapGenerator::perlinNoise(i * scale, j * scale, 0)  * 200.0) - 100;
-    //     }
-    // }
-
-    // double scale2 = 0.005;
-    // for (int i = 0; i < width; i++) {
-    //     for (int j = 0;j < height; j++) {
-    //         mAltitudeMap[i][j] += std::round(MapGenerator::perlinNoise(i * scale2, j * scale2, 0)  * 200.0) - 100;
-    //         if(mAltitudeMap[i][j] < -100){
-    //             mAltitudeMap[i][j] = -100;
-    //         }
-
-    //         if(mAltitudeMap[i][j] > 100){
-    //             mAltitudeMap[i][j] = 100;
-    //         }
-    //     }
-    // }
+    flat();
 }
 
 void MapGenerator::addOctaves(double scale) {
-    // TODO
-    // for (int i = 0; i < mWidth * mHeight; i++) {
-    //     for (int j = 0;j < height; j++) {
-    //         mAltitudeMap[i][j] += std::round(MapGenerator::perlinNoise(i * scale, j * scale, 0)  * 200.0) - 100;
-    //         if(mAltitudeMap[i][j] < -100){
-    //             mAltitudeMap[i][j] = -100;
-    //         }
-
-    //         if(mAltitudeMap[i][j] > 100){
-    //             mAltitudeMap[i][j] = 100;
-    //         }
-    //     }
-    // }
-
     for (int i = 0; i < mWidth * mHeight; i++) {
         int gridX = i % mWidth;
 		int gridY = i / mWidth;
@@ -60,6 +27,43 @@ void MapGenerator::addOctaves(double scale) {
             mAltitudeMap[i] = 100;
         }
     }
+}
+
+void MapGenerator::flat(){
+    for (int i = 0; i < mWidth * mHeight; i++) {
+        int gridX = i % mWidth;
+		int gridY = i / mWidth;
+        int sumAltitude = mAltitudeMap[i];
+        sumAltitude += getAltitude( gridX - 1, gridY - 1);
+        sumAltitude += getAltitude( gridX - 0, gridY - 1);
+        sumAltitude += getAltitude( gridX + 1, gridY - 1);
+        sumAltitude += getAltitude( gridX - 1, gridY - 0);
+        sumAltitude += getAltitude( gridX - 0, gridY - 0);
+        sumAltitude += getAltitude( gridX + 1, gridY - 0);
+        sumAltitude += getAltitude( gridX - 1, gridY + 1);
+        sumAltitude += getAltitude( gridX - 0, gridY + 1);
+        sumAltitude += getAltitude( gridX + 1, gridY + 1);
+        mAltitudeMap[i] = sumAltitude / 9;
+    }
+}
+
+int MapGenerator::getAltitude(int x, int y) {
+    if(x < 0){
+        x = 0;
+    }
+
+    if(x > mWidth - 1){
+        x = mWidth - 1;
+    }
+
+    if(y < 0){
+        y = 0;
+    }
+
+    if(y > mHeight - 1){
+        y = mHeight - 1;
+    }
+    return mAltitudeMap[y * mWidth + x];
 }
 
 // 生成柏林噪声
