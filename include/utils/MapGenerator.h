@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 
+
 class MapGenerator {
     public:
         int* mAltitudeMap = NULL;

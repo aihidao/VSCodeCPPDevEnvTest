@@ -9,6 +9,11 @@ class Cell{
         Cell* rightCell = NULL;
         Cell* upCell = NULL;
         Cell* downCell = NULL;
+        // 1--->2
+        // |   |
+        //4<----3
+        static SDL_Point OUTTER_RECT[4];
+        static SDL_Point INNER_RECT[4];
     private:
         int mLocalX = 0;
         int mLocalY = 0;
@@ -24,6 +29,7 @@ class Cell{
         void setAltitude(int mAltitude);
         void draw();
         void drawCellInfo();
+        SDL_Point getDrawPositioniByCellRelativePosition(SDL_Point stagePosition);
         SDL_Color getGroudColor(int altitude);
         ~Cell();
 };
