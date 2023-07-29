@@ -9,23 +9,17 @@ MapGenerator::MapGenerator(int width,int height,int seed) {
     mHeight = height;
     mAltitudeMap = new int[mWidth * mHeight];
 
-    addOctaves(0.05);
-    addOctaves(0.005);
+    addOctaves(-300,300,0.05);
+    addOctaves(-300,300,0.005);
     flat();
 }
 
-void MapGenerator::addOctaves(double scale) {
+void MapGenerator::addOctaves(int minAltitude, int maxAltitude,double scale) {
+    int altitudeDiff = maxAltitude - minAltitude;
     for (int i = 0; i < mWidth * mHeight; i++) {
         int gridX = i % mWidth;
 		int gridY = i / mWidth;
-        mAltitudeMap[i] += std::round(MapGenerator::perlinNoise(gridX * scale, gridY * scale, 0)  * 200.0) - 100;
-        if(mAltitudeMap[i] < -100){
-            mAltitudeMap[i] = -100;
-        }
-
-        if(mAltitudeMap[i] > 100){
-            mAltitudeMap[i] = 100;
-        }
+        mAltitudeMap[i] += minAltitude + std::round(MapGenerator::perlinNoise(gridX * scale, gridY * scale, 0)  * altitudeDiff);
     }
 }
 

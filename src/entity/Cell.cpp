@@ -68,7 +68,7 @@ void Cell::draw(){
     //     drawTerrainTypeB();
     // }
 
-    drawTerrainTypeC();
+    drawTerrain();
     // if(mAltitude > 0){
     //     SDL_Point linePoints[] = { 
     //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
@@ -77,7 +77,7 @@ void Cell::draw(){
     //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3]),
     //     };
 
-    //     SDL_SetRenderDrawColor(mRenderer, 142, 64, 54, 128);
+    //     SDL_SetRenderDrawColor(mRenderer, 142, 64, 54, 64);
     //     //SDL_RenderDrawLines(mRenderer, linePoints, 3);
     //     //SDL_RenderDrawLine(mRenderer,);
     //     if(upCell == NULL || mAltitude > upCell->mAltitude){
@@ -92,196 +92,7 @@ void Cell::draw(){
 
 }
 
-void Cell::drawTerrainTypeA(){
-    // 设置颜色
-    SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
-
-    SDL_Color groudColor = getGroudColor();
-    if(leftCell != NULL){
-        //SDL_Color testColor = {255,0,0,255};
-        SDL_Point pointsLeft[] = { 
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[3]),
-            leftCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[2])
-        };
-
-        SDL_Color colorsLeft[] = {
-            groudColor,
-            groudColor,
-            //groudColor
-            leftCell->getGroudColor()
-        };
-
-        DrawUtils::drawTriangle(mRenderer, pointsLeft, colorsLeft);
-        if(upCell != NULL){
-            SDL_Point pointsLeftUp[] = { 
-                this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-                leftCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[1]),
-                upCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[3])
-            };
-
-            SDL_Color colorsLeftUp[] = {
-                groudColor,
-                // groudColor,
-                // groudColor
-                leftCell->getGroudColor(),
-                upCell->getGroudColor()
-            };
-            DrawUtils::drawTriangle(mRenderer, pointsLeftUp, colorsLeftUp);
-        }
-    }
-
-    if(upCell != NULL){
-        //SDL_Color testColor = {255,0,0,255};
-        SDL_Point pointsUp[] = { 
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[1]),
-            upCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[3])
-        };
-
-        SDL_Color colorsUp[] = {
-            groudColor,
-            groudColor,
-            //groudColor
-            upCell->getGroudColor()
-        };
-        DrawUtils::drawTriangle(mRenderer, pointsUp, colorsUp);
-    }
-
-    if(rightCell != NULL){
-        //SDL_Color testColor = {255,0,0,255};
-        SDL_Point pointsRight[] = { 
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[1]),
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[2]),
-            rightCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0])
-        };
-
-        SDL_Color colorsRight[] = {
-            groudColor,
-            groudColor,
-            //groudColor
-            rightCell->getGroudColor()
-        };
-
-        DrawUtils::drawTriangle(mRenderer, pointsRight, colorsRight);
-        if(downCell != NULL){
-            SDL_Point pointsRightDown[] = { 
-                this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[2]),
-                rightCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[3]),
-                downCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[1])
-            };
-
-            SDL_Color colorsRightDown[] = {
-                groudColor,
-                // groudColor,
-                // groudColor
-                rightCell->getGroudColor(),
-                downCell->getGroudColor()
-            };
-            DrawUtils::drawTriangle(mRenderer, pointsRightDown, colorsRightDown);
-        }
-    }
-
-    if(downCell != NULL){
-        //SDL_Color testColor = {255,0,0,255};
-        SDL_Point pointsDown[] = { 
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[2]),
-            this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[3]),
-            downCell->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[1])
-        };
-
-        SDL_Color colorsDown[] = {
-            groudColor,
-            groudColor,
-            groudColor
-            //downCell->getGroudColor()
-        };
-
-        DrawUtils::drawTriangle(mRenderer, pointsDown, colorsDown);
-    }
-}
-
-void Cell::drawTerrainTypeB(){
-    SDL_Color groudColor = getGroudColor();
-
-
-    SDL_Color colorsLeftUp[] = {
-        groudColor,
-        groudColor,
-        groudColor
-        //leftCell->getGroudColor()
-    };
-
-    //如果高于低于左边的则需要填充到高度范围
-    int leftAdjust = 0;
-    if(leftCell != NULL){
-        if(mAltitude < leftCell->mAltitude){
-            leftAdjust =  leftCell->mAltitude - mAltitude;
-        }
-    }
-
-    // SDL_Point pointAdjust1 = {
-    //     Cell::OUTTER_RECT[0].x - leftAdjust / 2,
-    //     Cell::OUTTER_RECT[0].y - leftAdjust / 2
-    // };
-
-    // SDL_Point pointAdjust2 = {
-    //     Cell::OUTTER_RECT[3].x - leftAdjust / 2,
-    //     Cell::OUTTER_RECT[3].y - leftAdjust / 2
-    // };
-
-    SDL_Point pointsLeft[] = { 
-        this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3])
-    };
-
-    DrawUtils::drawTriangle(mRenderer, pointsLeft, colorsLeftUp);
-
-    //如果高于高于右边的则需要填充到高度范围
-    int rightAdjust = 0;
-    if(rightCell != NULL){
-        if(mAltitude > rightCell->mAltitude){
-            rightAdjust = mAltitude - rightCell->mAltitude;
-        }
-    }
-
-    // SDL_Point pointRightAdjust1 = {
-    //     Cell::OUTTER_RECT[1].x + rightAdjust / 2,
-    //     Cell::OUTTER_RECT[1].y + rightAdjust / 2
-    // };
-
-    // SDL_Point pointRightAdjust2 = {
-    //     Cell::OUTTER_RECT[2].x + rightAdjust / 2,
-    //     Cell::OUTTER_RECT[2].y + rightAdjust / 2
-    // };
-
-    SDL_Point pointsRight[] = { 
-        this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2])
-    };
-
-    DrawUtils::drawTriangle(mRenderer, pointsRight, colorsLeftUp);
-
-    SDL_Point pointsUp[] = { 
-        this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1])
-    };
-
-    DrawUtils::drawTriangle(mRenderer, pointsUp, colorsLeftUp);
-
-    SDL_Point pointsDown[] = { 
-        this->getDrawPositioniByCellRelativePosition(Cell::INNER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3])
-    };
-
-    DrawUtils::drawTriangle(mRenderer, pointsDown, colorsLeftUp);
-}
-
-void Cell::drawTerrainTypeC(){
+void Cell::drawTerrain(){
     SDL_Color groudColor = getGroudColor();
 
     SDL_Color colors[] = {
@@ -293,20 +104,20 @@ void Cell::drawTerrainTypeC(){
     };
 
     SDL_Point points[] = {
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2]),
-        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3])
+        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0], false),
+        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1], false),
+        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2], false),
+        this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3], false)
     };
     DrawUtils::drawQuadrilateral(mRenderer, points, colors);
 
     if(leftCell != NULL){
         if(mAltitude < leftCell->mAltitude){
             SDL_Point pointsAdjust[] = {
-                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
-                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3]),
-                leftCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2]),
-                leftCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1])
+                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0], false),
+                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3], false),
+                leftCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2], false),
+                leftCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1], false)
             };
 
             SDL_Color colorsAdjust[] = {
@@ -324,10 +135,10 @@ void Cell::drawTerrainTypeC(){
     if(upCell != NULL){
         if(mAltitude < upCell->mAltitude){
             SDL_Point pointsAdjust[] = {
-                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
-                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1]),
-                upCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2]),
-                upCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3])
+                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0], false),
+                this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1], false),
+                upCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2], false),
+                upCell->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3], false)
             };
 
             SDL_Color colorsAdjust[] = {
@@ -341,10 +152,32 @@ void Cell::drawTerrainTypeC(){
             DrawUtils::drawQuadrilateral(mRenderer, pointsAdjust, colorsAdjust);
         }
     }
+    // //绘制水
+    if(mAltitude < 0){
+        //SDL_Color colorWater = DrawUtils::overlayColors(getGroudColor(),{0, 0, 255, 128});
+        //SDL_Color colorWater = DrawUtils::overlayColors({63, 155, 255, 128},getGroudColor());
+        SDL_Color colorWater = {63, 155, 255, 192};
+        SDL_Color colorsWater[] = {
+            colorWater,
+            colorWater,
+            colorWater,
+            colorWater
+        };
+        SDL_Point waterPoints[] = {
+            this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0], true),
+            this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1], true),
+            this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2], true),
+            this->getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3], true)
+        };
+        DrawUtils::drawQuadrilateral(mRenderer, waterPoints, colorsWater);
+    }
 }
 
-SDL_Point Cell::getDrawPositioniByCellRelativePosition(SDL_Point cellRelativePosition){
-    int landAltitude = mAltitude > 0 ? mAltitude : 0;
+SDL_Point Cell::getDrawPositioniByCellRelativePosition(SDL_Point cellRelativePosition,bool isWater){
+    int landAltitude = mAltitude;
+    if(isWater){
+        landAltitude = mAltitude > 0 ? mAltitude : 0;
+    }
     int gridPositionX = mLocalX * Game::CELL_SIZE_WIDTH;
     int gridPositionY = mLocalY * Game::CELL_SIZE_HEIGHT;
     SDL_Point coverDrawPoint = GridCoordinateConverterUtils::convertToDraw({gridPositionX + cellRelativePosition.x, gridPositionY + cellRelativePosition.y});
@@ -393,14 +226,8 @@ void Cell::drawCellInfo(){
 SDL_Color Cell::getGroudColor(){
     int altitude = mAltitude;
     SDL_Color groudColor;
-    if(altitude < -100){
-        altitude = -100;
-    }
-
-    if(altitude > 100){
-        altitude = 100;
-    }
-    
+    //大地的颜色
+    groudColor = {185, 122, 87, 255};
     if (altitude > 0) {
         int altitudeLevel = std::round(altitude / 10);
         // 颜色根据 altitude 大小变化，值越大越绿
@@ -424,7 +251,7 @@ SDL_Color Cell::getGroudColor(){
     }
 
     if(rightCell != NULL){
-        int dark = (rightCell->mAltitude - mAltitude) * 5;
+        int dark = (rightCell->mAltitude - mAltitude) * 3;
         if(mAltitude < rightCell->mAltitude){
             Uint8 r = groudColor.r - dark > 0 ? groudColor.r - dark : 0;
             Uint8 g = groudColor.g - dark > 0 ? groudColor.g - dark : 0;
@@ -438,7 +265,7 @@ SDL_Color Cell::getGroudColor(){
             groudColor = {r, g, b, 255};
         }
     }else if(downCell != NULL){
-        int dark = (downCell->mAltitude - mAltitude) * 5;
+        int dark = (downCell->mAltitude - mAltitude) * 3;
         if(mAltitude < downCell->mAltitude){
             Uint8 r = groudColor.r - dark > 0 ? groudColor.r - dark : 0;
             Uint8 g = groudColor.g - dark > 0 ? groudColor.g - dark : 0;
@@ -452,6 +279,10 @@ SDL_Color Cell::getGroudColor(){
             groudColor = {r, g, b, 255};
         }
     }
+
+    // if(altitude < 0){
+    //     groudColor = DrawUtils::overlayColors(groudColor, {0, 0, 255, 128});
+    // }
     return groudColor;
 }
 

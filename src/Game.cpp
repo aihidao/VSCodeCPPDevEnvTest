@@ -167,7 +167,7 @@ bool Game::init()
 			}
 			else
 			{
-
+				SDL_SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_BLEND);
 				//Initialize renderer color
 				SDL_SetRenderDrawColor(mRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
