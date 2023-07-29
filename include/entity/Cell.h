@@ -28,9 +28,12 @@ class Cell{
         Cell(SDL_Renderer* renderer,TextRender *textRender,int x,int y,int type);
         void setAltitude(int mAltitude);
         void draw();
+        void drawTerrainTypeA();
+        void drawTerrainTypeB();
+        void drawTerrainTypeC();
         void drawCellInfo();
         SDL_Point getDrawPositioniByCellRelativePosition(SDL_Point stagePosition);
-        SDL_Color getGroudColor(int altitude);
+        SDL_Color getGroudColor();
         ~Cell();
 };
 #endif
