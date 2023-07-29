@@ -11,6 +11,8 @@ MapGenerator::MapGenerator(int width,int height,int seed) {
 
     addOctaves(-300,300,0.05);
     addOctaves(-300,300,0.005);
+    addCircle(250,250,300,150);
+    addCircle(100,100,300,150);
     flat();
 }
 
@@ -20,6 +22,22 @@ void MapGenerator::addOctaves(int minAltitude, int maxAltitude,double scale) {
         int gridX = i % mWidth;
 		int gridY = i / mWidth;
         mAltitudeMap[i] += minAltitude + std::round(MapGenerator::perlinNoise(gridX * scale, gridY * scale, 0)  * altitudeDiff);
+    }
+}
+
+void MapGenerator::addCircle(int x, int y,int centerAltitude,double radius){
+    for (int i = 0; i < mWidth * mHeight; i++) {
+        int gridX = i % mWidth;
+		int gridY = i / mWidth;
+
+        //到中心越远，高度越低
+        double distance = std::sqrt(std::pow(gridX - x, 2) + std::pow(gridY - y, 2));
+        if(distance > radius){
+            continue;
+        }
+        double altitudeDiff = centerAltitude * (1 - distance / radius);
+        mAltitudeMap[i] += std::round(altitudeDiff);
+        //mAltitudeMap[i] += ;
     }
 }
 
