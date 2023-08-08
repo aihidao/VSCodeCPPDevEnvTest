@@ -5,6 +5,7 @@
 #include "Cell.h"
 #include "DebugInfoBox.h"
 #include "Text.h"
+#include "CellChunk.h"
 class GameStage{
     public:
         static int STAGE_POSITION_X;
@@ -29,7 +30,7 @@ class GameStage{
         TextRender *mTextRender = NULL;
         SDL_Renderer *mRenderer = NULL;
         Cell** mCellArray = NULL;
-
+        CellChunk** mCellChunkArray = NULL;
         DebugInfoBox* mDebugInfoBox = NULL;
         //fps
         int frameCount = 0;

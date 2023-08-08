@@ -250,6 +250,7 @@ SDL_Color Cell::getGroudColor(){
         groudColor = {r, g, 255, 255}; // 设置颜色并设置 alpha 值为 255（完全不透明）
     }
 
+    //光照
     if(rightCell != NULL){
         int dark = (rightCell->mAltitude - mAltitude) * 3;
         if(mAltitude < rightCell->mAltitude){
@@ -265,7 +266,7 @@ SDL_Color Cell::getGroudColor(){
             groudColor = {r, g, b, 255};
         }
     }else if(downCell != NULL){
-        int dark = (downCell->mAltitude - mAltitude) * 3;
+        int dark = (downCell->mAltitude - mAltitude) * 5;
         if(mAltitude < downCell->mAltitude){
             Uint8 r = groudColor.r - dark > 0 ? groudColor.r - dark : 0;
             Uint8 g = groudColor.g - dark > 0 ? groudColor.g - dark : 0;

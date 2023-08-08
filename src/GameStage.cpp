@@ -35,12 +35,15 @@ GameStage::GameStage(SDL_Renderer* renderer){
 void GameStage::initGrid(){
 	mCellArray = new Cell* [Game::MAP_HEIGHT * Game::MAP_WIDTH];
 	MapGenerator mapGenerator = MapGenerator(Game::MAP_WIDTH, Game::MAP_HEIGHT, 0);
+	//init Cells
 	for (int i = 0; i < Game::MAP_HEIGHT  * Game::MAP_WIDTH; i++) {
 		++Game::initProgress;
 		int gridX = i % Game::MAP_WIDTH;
 		int gridY = i / Game::MAP_WIDTH;
 		int altitude = mapGenerator.mAltitudeMap[i];
 		mCellArray[i] = new Cell(mRenderer,mTextRender, gridX, gridY,0);
+
+		// Linked Cell
 		if(gridX > 0){
 			mCellArray[i]->leftCell = mCellArray[i - 1];
 			mCellArray[i - 1]->rightCell = mCellArray[i];
@@ -50,10 +53,33 @@ void GameStage::initGrid(){
 			mCellArray[i]->upCell = mCellArray[i - Game::MAP_WIDTH];
 			mCellArray[i - Game::MAP_WIDTH]->downCell = mCellArray[i];
 		}
+
+		// Setting value
 		mCellArray[i]->setAltitude(altitude);
 	}
 
-	//delete mapGenerator;
+	//init CellChunks
+	int chunkIndexGridX = 0;
+	int chunkIndexGridY = 0;
+	int chunkGridSizeWidth = std::ceil(static_cast<double>(Game::MAP_WIDTH) / Game::CHUNK_SIZE_WIDTH);
+	int chunkGridSizeHeight = std::ceil(static_cast<double>(Game::MAP_WIDTH) / Game::CHUNK_SIZE_HEIGHT);
+	mCellChunkArray = new CellChunk* [chunkGridSizeWidth * chunkGridSizeHeight];
+	for(int j = 0; j < chunkGridSizeHeight; j++){
+		for(int i = 0; i < chunkGridSizeWidth; i++){
+			int index = j * chunkGridSizeWidth + i;
+			mCellChunkArray[index] = new CellChunk(mRenderer, i * Game::CELL_SIZE_WIDTH, j * Game::CELL_SIZE_HEIGHT, Game::CHUNK_SIZE_WIDTH, Game::CHUNK_SIZE_HEIGHT, mCellArray);
+			//Linked Cell
+			if(i > 0){
+				mCellChunkArray[index]->leftCellChunk = mCellChunkArray[index - 1];
+				mCellChunkArray[index - 1]->rightCellChunk = mCellChunkArray[index];
+			}
+
+			if(j > 0){
+				mCellChunkArray[index]->upCellChunk = mCellChunkArray[index - chunkGridSizeWidth];
+				mCellChunkArray[index - chunkGridSizeWidth]->downCellChunk = mCellChunkArray[index];
+			}
+		}
+	}
 }
 
 void GameStage::getShowGridInfo(){

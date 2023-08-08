@@ -19,6 +19,9 @@ public:
     static int CELL_SIZE_WIDTH;
     static int CELL_SIZE_HEIGHT;
 
+    static int CHUNK_SIZE_WIDTH;
+    static int CHUNK_SIZE_HEIGHT;
+
     static volatile int initProgress;
 private:
     //The window we'll be rendering to

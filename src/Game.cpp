@@ -21,6 +21,9 @@ int	Game::MAP_HEIGHT = 500;
 int	Game::CELL_SIZE_WIDTH = 50;
 int	Game::CELL_SIZE_HEIGHT = 50;
 
+int	Game::CHUNK_SIZE_WIDTH = 50;
+int	Game::CHUNK_SIZE_HEIGHT = 50;
+
 volatile int Game::initProgress = 0;
 Game::Game(){
 	printf("Screen width: %d\n", Game::SCREEN_WIDTH);
