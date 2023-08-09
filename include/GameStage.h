@@ -31,6 +31,8 @@ class GameStage{
         SDL_Renderer *mRenderer = NULL;
         Cell** mCellArray = NULL;
         CellChunk** mCellChunkArray = NULL;
+        int mCellChunkArrayWidth = 0;
+        int mCellChunkArrayHeight = 0;
         DebugInfoBox* mDebugInfoBox = NULL;
         //fps
         int frameCount = 0;

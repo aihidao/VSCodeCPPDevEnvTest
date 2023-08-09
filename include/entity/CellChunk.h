@@ -9,8 +9,8 @@ class CellChunk{
         CellChunk* upCellChunk = NULL;
         CellChunk* downCellChunk = NULL;
     private:
-        int startGridX;
-        int startGridY;
+        int mStartGridX;
+        int mStartGridY;
         int mWidth;
         int mHeight;
 
@@ -23,6 +23,7 @@ class CellChunk{
         int getStartGridY();
         int getWidth();
         int getHeight();
+        void draw();
         ~CellChunk();
 };
 #endif

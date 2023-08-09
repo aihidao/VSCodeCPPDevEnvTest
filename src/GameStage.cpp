@@ -61,13 +61,16 @@ void GameStage::initGrid(){
 	//init CellChunks
 	int chunkIndexGridX = 0;
 	int chunkIndexGridY = 0;
-	int chunkGridSizeWidth = std::ceil(static_cast<double>(Game::MAP_WIDTH) / Game::CHUNK_SIZE_WIDTH);
-	int chunkGridSizeHeight = std::ceil(static_cast<double>(Game::MAP_WIDTH) / Game::CHUNK_SIZE_HEIGHT);
-	mCellChunkArray = new CellChunk* [chunkGridSizeWidth * chunkGridSizeHeight];
-	for(int j = 0; j < chunkGridSizeHeight; j++){
-		for(int i = 0; i < chunkGridSizeWidth; i++){
-			int index = j * chunkGridSizeWidth + i;
-			mCellChunkArray[index] = new CellChunk(mRenderer, i * Game::CELL_SIZE_WIDTH, j * Game::CELL_SIZE_HEIGHT, Game::CHUNK_SIZE_WIDTH, Game::CHUNK_SIZE_HEIGHT, mCellArray);
+	mCellChunkArrayWidth = std::ceil(static_cast<double>(Game::MAP_WIDTH) / Game::CHUNK_SIZE_WIDTH);
+	mCellChunkArrayHeight = std::ceil(static_cast<double>(Game::MAP_WIDTH) / Game::CHUNK_SIZE_HEIGHT);
+	mCellChunkArray = new CellChunk* [mCellChunkArrayWidth * mCellChunkArrayHeight];
+	for(int j = 0; j < mCellChunkArrayHeight; j++){
+		for(int i = 0; i < mCellChunkArrayWidth; i++){
+			int chunkSizeWidth = i * Game::CHUNK_SIZE_WIDTH + Game::CHUNK_SIZE_WIDTH > Game::MAP_WIDTH ? Game::MAP_WIDTH - i * Game::CHUNK_SIZE_WIDTH : Game::CHUNK_SIZE_WIDTH;
+			int chunkSizeHeight = j * Game::CHUNK_SIZE_HEIGHT + Game::CHUNK_SIZE_HEIGHT > Game::MAP_HEIGHT ? Game::MAP_HEIGHT - j * Game::CHUNK_SIZE_HEIGHT : Game::CHUNK_SIZE_HEIGHT;
+			int index = j * mCellChunkArrayWidth + i;
+			mCellChunkArray[index] = new CellChunk(mRenderer, i * Game::CELL_SIZE_WIDTH, j * Game::CELL_SIZE_HEIGHT, chunkSizeWidth, chunkSizeHeight, mCellArray);
+		
 			//Linked Cell
 			if(i > 0){
 				mCellChunkArray[index]->leftCellChunk = mCellChunkArray[index - 1];
@@ -75,8 +78,8 @@ void GameStage::initGrid(){
 			}
 
 			if(j > 0){
-				mCellChunkArray[index]->upCellChunk = mCellChunkArray[index - chunkGridSizeWidth];
-				mCellChunkArray[index - chunkGridSizeWidth]->downCellChunk = mCellChunkArray[index];
+				mCellChunkArray[index]->upCellChunk = mCellChunkArray[index - mCellChunkArrayWidth];
+				mCellChunkArray[index - mCellChunkArrayWidth]->downCellChunk = mCellChunkArray[index];
 			}
 		}
 	}
@@ -228,16 +231,19 @@ void GameStage::draw(){
 	// 	}
 	// }
 	// 打印地图数据
-	for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
-		for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
-			mCellArray[y * Game::MAP_WIDTH + x]->draw();
-		}
-	}
+	// for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
+	// 	for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
+	// 		mCellArray[y * Game::MAP_WIDTH + x]->draw();
+	// 	}
+	// }
 
-	for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
-		for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
-			mCellArray[y * Game::MAP_WIDTH + x]->drawCellInfo();
-		}
+	// for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
+	// 	for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
+	// 		mCellArray[y * Game::MAP_WIDTH + x]->drawCellInfo();
+	// 	}
+	// }
+	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
+		mCellChunkArray[i]->draw();
 	}
 	mDebugInfoBox->draw();
 
