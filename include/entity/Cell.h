@@ -23,14 +23,21 @@ class Cell{
         Text* mText = NULL;
         SDL_Renderer* mRenderer = NULL;
         TextRender *mTextRender = NULL;
+        SDL_Texture* mCellTexture = NULL;
     public:
         Cell();
         Cell(SDL_Renderer* renderer,TextRender *textRender,int x,int y,int type);
         void setAltitude(int mAltitude);
         void draw();
+        SDL_Texture* createCellTexture();
+        void updateTexture();
         void drawTerrain();
         void drawCellInfo();
-        SDL_Point getDrawPositioniByCellRelativePosition(SDL_Point stagePosition,bool isWater);
+        int getGroudAltitude();
+        SDL_Point getDrawPosition(SDL_Point stagePosition,bool isWater);
+        SDL_Point getDrawPositionWithAltitude(SDL_Point stagePosition,bool isWater);
+        SDL_Point getDrawPositioniByCellRelativePosition(SDL_Point cellRelativePosition,bool isWater);
+        SDL_Point getDrawPositioniByNearCellPosition(SDL_Point nearPosition,bool isWater);
         SDL_Color getGroudColor();
         ~Cell();
 };

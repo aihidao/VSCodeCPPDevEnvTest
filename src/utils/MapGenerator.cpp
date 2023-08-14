@@ -8,12 +8,17 @@ MapGenerator::MapGenerator(int width,int height,int seed) {
     mWidth = width;
     mHeight = height;
     mAltitudeMap = new int[mWidth * mHeight];
-
+    for (int i = 0; i < mWidth * mHeight; i++) {
+        int gridX = i % mWidth;
+		int gridY = i / mWidth;
+        mAltitudeMap[i] = 0;
+    }
     addOctaves(-300,300,0.05);
     addOctaves(-300,300,0.005);
     addCircle(250,250,300,150);
     addCircle(100,100,300,150);
     flat();
+    printf("stop\n");
 }
 
 void MapGenerator::addOctaves(int minAltitude, int maxAltitude,double scale) {

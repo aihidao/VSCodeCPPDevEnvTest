@@ -221,15 +221,19 @@ void GameStage::mouseUp(SDL_Event* e) {
 }
 
 void GameStage::draw(){
-	SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
+	//SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
+	SDL_SetRenderDrawColor(mRenderer, 128, 128, 128, 0xFF);
 	//Clear screen
 	SDL_RenderClear(mRenderer);
 
-	// for (int y = 0; y < Game::MAP_HEIGHT; y++) {
-	// 	for (int x = 0; x < Game::MAP_WIDTH; x++) {
-	// 		mCellArray[y * Game::MAP_WIDTH + x]->draw();
-	// 	}
-	// }
+	for (int y = 0; y < Game::MAP_HEIGHT; y++) {
+		for (int x = 0; x < Game::MAP_WIDTH; x++) {
+			// if(y * Game::MAP_WIDTH + x == 1){
+			// 	mCellArray[y * Game::MAP_WIDTH + x]->draw();
+			// }
+			mCellArray[y * Game::MAP_WIDTH + x]->draw();
+		}
+	}
 	// 打印地图数据
 	// for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
 	// 	for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
@@ -242,9 +246,9 @@ void GameStage::draw(){
 	// 		mCellArray[y * Game::MAP_WIDTH + x]->drawCellInfo();
 	// 	}
 	// }
-	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
-		mCellChunkArray[i]->draw();
-	}
+	// for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
+	// 	mCellChunkArray[i]->draw();
+	// }
 	mDebugInfoBox->draw();
 
 	SDL_RenderPresent(mRenderer);

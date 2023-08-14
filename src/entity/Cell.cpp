@@ -62,13 +62,33 @@ void Cell::setAltitude(int altitude){
 }
 
 void Cell::draw(){
+    if(mCellTexture == NULL){
+        //mCellTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Game::CELL_SIZE_WIDTH, Game::CELL_SIZE_HEIGHT);
+        createCellTexture();
+    }else{
+        int gridX = mLocalX * Game::CELL_SIZE_WIDTH;
+        int gridY = mLocalY * Game::CELL_SIZE_HEIGHT;
+
+        SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({gridX, gridY});
+        SDL_Point srcPos = getDrawPosition({0,0}, false);
+        SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], true);
+        SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], true);
+        SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], true);
+        SDL_Point bottomLeftPoint = getDrawPosition(Cell::OUTTER_RECT[3], true);
+        int terrainWidht = topRightPoint.x - bottomLeftPoint.x;
+        int terrainHeight = bottomRightPoint.y - topLeftPoint.y  + getGroudAltitude();
+
+        SDL_Rect srcRect = { 0, 0, terrainWidht, terrainHeight};
+        SDL_Rect dstRect = {GameStage::STAGE_POSITION_X + readPos.x, GameStage::STAGE_POSITION_Y + readPos.y - mAltitude, terrainWidht, terrainHeight};
+        SDL_RenderCopy(mRenderer, mCellTexture, &srcRect, &dstRect);
+    }
     // if(mAltitude > 0){
     //     drawTerrainTypeA();
     // }else{
     //     drawTerrainTypeB();
     // }
 
-    drawTerrain();
+    //drawTerrain();
     // if(mAltitude > 0){
     //     SDL_Point linePoints[] = { 
     //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
@@ -89,6 +109,115 @@ void Cell::draw(){
     //     }
 
     // }
+
+}
+
+SDL_Texture* Cell::createCellTexture(){
+    SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], false);
+    SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], false);
+    SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], false);
+    SDL_Point bottomLeftPoint = getDrawPosition(Cell::OUTTER_RECT[3], false);
+
+    int groudAltitude = mAltitude > 0 ? mAltitude : 0;
+    int terrainWidht = topRightPoint.x - bottomLeftPoint.x;
+    int terrainHeight = bottomRightPoint.y - topLeftPoint.y + groudAltitude;
+    // 创建一个目标纹理
+    mCellTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,  terrainWidht, terrainHeight);
+    SDL_SetTextureBlendMode(mCellTexture, SDL_BLENDMODE_BLEND);
+    // 设置渲染目标为chunkTexture
+    SDL_SetRenderTarget(mRenderer, mCellTexture);
+
+    updateTexture();
+    
+    // 清除渲染目标
+    SDL_SetRenderTarget(mRenderer, NULL);
+}
+
+void Cell::updateTexture(){
+    SDL_Color groudColor = getGroudColor();
+    SDL_Color colors[] = {
+        groudColor,
+        groudColor,
+        groudColor,
+        groudColor
+        //leftCell->getGroudColor()
+    };
+
+    SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], false);
+    SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], false);
+    SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], false);
+    SDL_Point bottomLeftPoint = getDrawPosition(Cell::OUTTER_RECT[3], false);
+    int terrainWidht = topRightPoint.x - bottomLeftPoint.x;
+    int terrainHeight = bottomRightPoint.y - topLeftPoint.y;
+
+    SDL_Point points[] = {
+        {topLeftPoint.x + terrainWidht / 2, topLeftPoint.y},
+        {topRightPoint.x + terrainWidht / 2, topRightPoint.y},
+        {bottomRightPoint.x + terrainWidht / 2, bottomRightPoint.y},
+        {bottomLeftPoint.x + terrainWidht / 2, bottomLeftPoint.y},
+    };
+
+    DrawUtils::drawQuadrilateral(mRenderer, points, colors);
+
+    //连接下一个cell
+    if(downCell != NULL){
+        if(mAltitude > downCell->mAltitude){
+            SDL_Point p1 = this->getDrawPosition(Cell::OUTTER_RECT[2], false);
+            SDL_Point p2 = this->getDrawPosition(Cell::OUTTER_RECT[3], false);
+            SDL_Point pointsAdjust[] = {
+                {p1.x + terrainWidht / 2 , p1.y},
+                {p2.x + terrainWidht / 2 , p2.y},
+                {p2.x + terrainWidht / 2 , p2.y + getGroudAltitude() - downCell->getGroudAltitude()},
+                {p1.x + terrainWidht / 2 , p1.y + getGroudAltitude() - downCell->getGroudAltitude()}
+            };
+
+            SDL_Color colorsAdjust[] = {
+                groudColor,
+                groudColor,
+                downCell->getGroudColor(),
+                downCell->getGroudColor()
+            };
+
+            // SDL_Color colorsAdjust[] = {
+            //     {255,0,0,255},
+            //     {255,0,0,255},
+            //     {255,0,0,255},
+            //     {255,0,0,255}
+            // };
+
+            DrawUtils::drawQuadrilateral(mRenderer, pointsAdjust, colorsAdjust);
+        }
+    }
+
+    if(rightCell != NULL){
+        if(mAltitude > rightCell->mAltitude){
+            SDL_Point p1 = this->getDrawPosition(Cell::OUTTER_RECT[1], false);
+            SDL_Point p2 = this->getDrawPosition(Cell::OUTTER_RECT[2], false);
+            SDL_Point pointsAdjust[] = {
+                {p1.x + terrainWidht / 2 , p1.y},
+                {p2.x + terrainWidht / 2 , p2.y},
+                {p2.x + terrainWidht / 2 , p2.y + getGroudAltitude() - rightCell->getGroudAltitude()},
+                {p1.x + terrainWidht / 2 , p1.y + getGroudAltitude() - rightCell->getGroudAltitude()}
+            };
+
+            SDL_Color colorsAdjust[] = {
+                groudColor,
+                groudColor,
+                rightCell->getGroudColor(),
+                rightCell->getGroudColor()
+                //leftCell->getGroudColor()
+            };
+
+            // SDL_Color colorsAdjust[] = {
+            //     {255,0,0,255},
+            //     {255,0,0,255},
+            //     {255,0,0,255},
+            //     {255,0,0,255}
+            // };
+
+            DrawUtils::drawQuadrilateral(mRenderer, pointsAdjust, colorsAdjust);
+        }
+    }
 
 }
 
@@ -173,6 +302,30 @@ void Cell::drawTerrain(){
     }
 }
 
+SDL_Point Cell::getDrawPosition(SDL_Point cellRelativePosition,bool isWater){
+    int landAltitude = mAltitude;
+    if(isWater){
+        landAltitude = mAltitude > 0 ? mAltitude : 0;
+    }
+    SDL_Point coverDrawPoint = GridCoordinateConverterUtils::convertToDraw({cellRelativePosition.x, cellRelativePosition.y});
+    return {
+        static_cast<int>((coverDrawPoint.x)), 
+        static_cast<int>((coverDrawPoint.y))
+    };
+}
+
+SDL_Point Cell::getDrawPositionWithAltitude(SDL_Point cellRelativePosition,bool isWater){
+    int landAltitude = mAltitude;
+    if(isWater){
+        landAltitude = mAltitude > 0 ? mAltitude : 0;
+    }
+    SDL_Point coverDrawPoint = GridCoordinateConverterUtils::convertToDraw({cellRelativePosition.x, cellRelativePosition.y});
+    return {
+        static_cast<int>((coverDrawPoint.x)), 
+        static_cast<int>((coverDrawPoint.y - landAltitude))
+    };
+}
+
 SDL_Point Cell::getDrawPositioniByCellRelativePosition(SDL_Point cellRelativePosition,bool isWater){
     int landAltitude = mAltitude;
     if(isWater){
@@ -184,6 +337,20 @@ SDL_Point Cell::getDrawPositioniByCellRelativePosition(SDL_Point cellRelativePos
     return {
         static_cast<int>((GameStage::STAGE_POSITION_X + coverDrawPoint.x) * GameStage::GAME_MAP_SCALE), 
         static_cast<int>((GameStage::STAGE_POSITION_Y + coverDrawPoint.y - landAltitude)  * GameStage::GAME_MAP_SCALE)
+    };
+}
+
+SDL_Point Cell::getDrawPositioniByNearCellPosition(SDL_Point nearPosition,bool isWater){
+    int landAltitude = mAltitude;
+    if(isWater){
+        landAltitude = mAltitude > 0 ? mAltitude : 0;
+    }
+    int gridPositionX = mLocalX * Game::CELL_SIZE_WIDTH;
+    int gridPositionY = mLocalY * Game::CELL_SIZE_HEIGHT;
+    SDL_Point coverDrawPoint = GridCoordinateConverterUtils::convertToDraw({gridPositionX + nearPosition.x, gridPositionY + nearPosition.y});
+    return {
+        static_cast<int>((coverDrawPoint.x) ), 
+        static_cast<int>((coverDrawPoint.y - landAltitude))
     };
 }
 
@@ -221,7 +388,9 @@ void Cell::drawCellInfo(){
     //}
 }
 
-
+int Cell::getGroudAltitude(){
+    return mAltitude > 0 ? mAltitude : 0;
+}
 
 SDL_Color Cell::getGroudColor(){
     int altitude = mAltitude;
