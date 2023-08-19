@@ -42,7 +42,7 @@ void CellChunk::draw(){
         SDL_Point point3 = GridCoordinateConverterUtils::convertToDraw({0, maxTextureHeight});
 
         SDL_Rect srcRect = { 0, 0, point1.x - point3.x, point2.y - point0.y};
-        SDL_Rect dstRect = { (GameStage::STAGE_POSITION_X + readPos.x) * GameStage::GAME_MAP_SCALE, (GameStage::STAGE_POSITION_Y + readPos.y) * GameStage::GAME_MAP_SCALE, (point1.x - point3.x) * GameStage::GAME_MAP_SCALE, (point2.y - point0.y) * GameStage::GAME_MAP_SCALE};
+        SDL_Rect dstRect = { (GameStage::STAGE_POSITION_X + readPos.x - (point0.x - point3.x)) * GameStage::GAME_MAP_SCALE, (GameStage::STAGE_POSITION_Y + readPos.y) * GameStage::GAME_MAP_SCALE, (point1.x - point3.x) * GameStage::GAME_MAP_SCALE, (point2.y - point0.y) * GameStage::GAME_MAP_SCALE};
         //SDL_Rect dstRect = { (GameStage::STAGE_POSITION_X + readPos.x) * GameStage::GAME_MAP_SCALE, (GameStage::STAGE_POSITION_Y + readPos.y) * GameStage::GAME_MAP_SCALE, maxTextureWidth * GameStage::GAME_MAP_SCALE, maxTextureHeight * GameStage::GAME_MAP_SCALE};
         SDL_RenderCopy(mRenderer, mChunkTexture, &srcRect, &dstRect);
     }
@@ -97,7 +97,7 @@ void CellChunk::updateTexture(){
                 SDL_Point point3 = GridCoordinateConverterUtils::convertToDraw({0, maxTextureHeight});
 
                 SDL_Rect srcRect = { 0, 0, terrainWidht, terrainHeight};
-                SDL_Rect dstRect = {(readPos.x + (point1.x - point3.x) / 2) , (readPos.y), terrainWidht , terrainHeight};
+                SDL_Rect dstRect = {(readPos.x + (point0.x - point3.x)) , (readPos.y), terrainWidht , terrainHeight};
                 SDL_RenderCopy(mRenderer, mCellArray[index]->getTexture(), &srcRect, &dstRect);
             //}
         }
