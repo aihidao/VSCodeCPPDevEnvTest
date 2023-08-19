@@ -66,21 +66,21 @@ void Cell::draw(){
         //mCellTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Game::CELL_SIZE_WIDTH, Game::CELL_SIZE_HEIGHT);
         createCellTexture();
     }else{
-        int gridX = mLocalX * Game::CELL_SIZE_WIDTH;
-        int gridY = mLocalY * Game::CELL_SIZE_HEIGHT;
+        // int gridX = mLocalX * Game::CELL_SIZE_WIDTH;
+        // int gridY = mLocalY * Game::CELL_SIZE_HEIGHT;
 
-        SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({gridX, gridY});
-        SDL_Point srcPos = getDrawPosition({0,0}, false);
-        SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], true);
-        SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], true);
-        SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], true);
-        SDL_Point bottomLeftPoint = getDrawPosition(Cell::OUTTER_RECT[3], true);
-        int terrainWidht = topRightPoint.x - bottomLeftPoint.x;
-        int terrainHeight = bottomRightPoint.y - topLeftPoint.y  + getGroudAltitude();
+        // SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({gridX, gridY});
+        // SDL_Point srcPos = getDrawPosition({0,0}, false);
+        // SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], true);
+        // SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], true);
+        // SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], true);
+        // SDL_Point bottomLeftPoint = getDrawPosition(Cell::OUTTER_RECT[3], true);
+        // int terrainWidht = topRightPoint.x - bottomLeftPoint.x;
+        // int terrainHeight = bottomRightPoint.y - topLeftPoint.y  + getGroudAltitude();
 
-        SDL_Rect srcRect = { 0, 0, terrainWidht, terrainHeight};
-        SDL_Rect dstRect = {GameStage::STAGE_POSITION_X + readPos.x, GameStage::STAGE_POSITION_Y + readPos.y - mAltitude, terrainWidht, terrainHeight};
-        SDL_RenderCopy(mRenderer, mCellTexture, &srcRect, &dstRect);
+        // SDL_Rect srcRect = { 0, 0, terrainWidht, terrainHeight};
+        // SDL_Rect dstRect = {(GameStage::STAGE_POSITION_X + readPos.x) * GameStage::GAME_MAP_SCALE , (GameStage::STAGE_POSITION_Y + readPos.y - mAltitude) * GameStage::GAME_MAP_SCALE , terrainWidht * GameStage::GAME_MAP_SCALE , terrainHeight * GameStage::GAME_MAP_SCALE };
+        // SDL_RenderCopy(mRenderer, mCellTexture, &srcRect, &dstRect);
     }
     // if(mAltitude > 0){
     //     drawTerrainTypeA();
@@ -133,6 +133,10 @@ SDL_Texture* Cell::createCellTexture(){
     SDL_SetRenderTarget(mRenderer, NULL);
 }
 
+SDL_Texture* Cell::getTexture(){
+    return mCellTexture;
+}
+
 void Cell::updateTexture(){
     SDL_Color groudColor = getGroudColor();
     SDL_Color colors[] = {
@@ -172,7 +176,7 @@ void Cell::updateTexture(){
             };
 
             SDL_Color colorsAdjust[] = {
-                groudColor,
+                groudColor, 
                 groudColor,
                 downCell->getGroudColor(),
                 downCell->getGroudColor()

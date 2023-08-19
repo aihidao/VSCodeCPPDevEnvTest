@@ -31,6 +31,7 @@ class Cell{
         void draw();
         SDL_Texture* createCellTexture();
         void updateTexture();
+        SDL_Texture* getTexture();
         void drawTerrain();
         void drawCellInfo();
         int getGroudAltitude();

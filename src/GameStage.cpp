@@ -69,7 +69,7 @@ void GameStage::initGrid(){
 			int chunkSizeWidth = i * Game::CHUNK_SIZE_WIDTH + Game::CHUNK_SIZE_WIDTH > Game::MAP_WIDTH ? Game::MAP_WIDTH - i * Game::CHUNK_SIZE_WIDTH : Game::CHUNK_SIZE_WIDTH;
 			int chunkSizeHeight = j * Game::CHUNK_SIZE_HEIGHT + Game::CHUNK_SIZE_HEIGHT > Game::MAP_HEIGHT ? Game::MAP_HEIGHT - j * Game::CHUNK_SIZE_HEIGHT : Game::CHUNK_SIZE_HEIGHT;
 			int index = j * mCellChunkArrayWidth + i;
-			mCellChunkArray[index] = new CellChunk(mRenderer, i * Game::CELL_SIZE_WIDTH, j * Game::CELL_SIZE_HEIGHT, chunkSizeWidth, chunkSizeHeight, mCellArray);
+			mCellChunkArray[index] = new CellChunk(mRenderer, i, j, chunkSizeWidth, chunkSizeHeight, mCellArray);
 		
 			//Linked Cell
 			if(i > 0){
@@ -226,17 +226,8 @@ void GameStage::draw(){
 	//Clear screen
 	SDL_RenderClear(mRenderer);
 
-	for (int y = 0; y < Game::MAP_HEIGHT; y++) {
-		for (int x = 0; x < Game::MAP_WIDTH; x++) {
-			// if(y * Game::MAP_WIDTH + x == 1){
-			// 	mCellArray[y * Game::MAP_WIDTH + x]->draw();
-			// }
-			mCellArray[y * Game::MAP_WIDTH + x]->draw();
-		}
-	}
-	// 打印地图数据
-	// for (int y = GameStage::TOP_LEFT_CELL_GRID_Y; y < GameStage::BOTTOM_RIGHT_CELL_GRID_Y; y++) {
-	// 	for (int x = GameStage::TOP_LEFT_CELL_GRID_X; x < GameStage::BOTTOM_RIGHT_CELL_GRID_X; x++) {
+	// for (int y = 0; y < Game::MAP_HEIGHT; y++) {
+	// 	for (int x = 0; x < Game::MAP_WIDTH; x++) {
 	// 		mCellArray[y * Game::MAP_WIDTH + x]->draw();
 	// 	}
 	// }
@@ -246,9 +237,10 @@ void GameStage::draw(){
 	// 		mCellArray[y * Game::MAP_WIDTH + x]->drawCellInfo();
 	// 	}
 	// }
-	// for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
-	// 	mCellChunkArray[i]->draw();
-	// }
+	//mCellChunkArray[0]->draw();
+	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
+		mCellChunkArray[i]->draw();
+	}
 	mDebugInfoBox->draw();
 
 	SDL_RenderPresent(mRenderer);
