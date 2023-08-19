@@ -40,6 +40,7 @@ class Cell{
         SDL_Point getDrawPositioniByCellRelativePosition(SDL_Point cellRelativePosition,bool isWater);
         SDL_Point getDrawPositioniByNearCellPosition(SDL_Point nearPosition,bool isWater);
         SDL_Color getGroudColor();
+        void freeTexture();
         ~Cell();
 };
 #endif

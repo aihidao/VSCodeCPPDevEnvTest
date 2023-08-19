@@ -222,7 +222,6 @@ void Cell::updateTexture(){
             DrawUtils::drawQuadrilateral(mRenderer, pointsAdjust, colorsAdjust);
         }
     }
-
 }
 
 void Cell::drawTerrain(){
@@ -458,6 +457,10 @@ SDL_Color Cell::getGroudColor(){
     //     groudColor = DrawUtils::overlayColors(groudColor, {0, 0, 255, 128});
     // }
     return groudColor;
+}
+
+void Cell::freeTexture(){
+    SDL_DestroyTexture(mCellTexture);
 }
 
 

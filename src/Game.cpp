@@ -8,15 +8,15 @@ and may not be redistributed without written permission.*/
 #include <iostream>
 #include <stdio.h>
 #include <string>
-#include <cmath>
+#include <cmath> 
 #include <Game.h>
 #include <thread>
 #include "GridCoordinateConverterUtils.h"
 int	Game::SCREEN_WIDTH = 1024;
 int	Game::SCREEN_HEIGHT = 768;
 
-int	Game::MAP_WIDTH = 180;
-int	Game::MAP_HEIGHT = 180;
+int	Game::MAP_WIDTH = 200; 
+int	Game::MAP_HEIGHT = 200;
 
 int	Game::CELL_SIZE_WIDTH = 50;
 int	Game::CELL_SIZE_HEIGHT = 50;
