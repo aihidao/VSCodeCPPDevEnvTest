@@ -13,6 +13,7 @@ class CellChunk{
         int mStartGridY;
         int mWidth;
         int mHeight;
+        int mMaxAltitude = 0;
 
         Cell** mCellArray = NULL;
 
