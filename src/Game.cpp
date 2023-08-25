@@ -15,8 +15,8 @@ and may not be redistributed without written permission.*/
 int	Game::SCREEN_WIDTH = 1024;
 int	Game::SCREEN_HEIGHT = 768;
 
-int	Game::MAP_WIDTH = 200; 
-int	Game::MAP_HEIGHT = 200;
+int	Game::MAP_WIDTH = 1000; 
+int	Game::MAP_HEIGHT = 1000;
 
 int	Game::CELL_SIZE_WIDTH = 50;
 int	Game::CELL_SIZE_HEIGHT = 50;
@@ -43,6 +43,23 @@ static int loading(void* data) {
 	return 0;
 }
 
+static int draw(void* data){
+	Game* game = (Game*)data;
+	try{
+		while(!game->mQuit){
+			if(game->mNeedLoading){
+				game->mLoadingPage->draw();
+			}else{
+				game->mGameStage->draw();
+			}
+		}
+	}catch(std::exception& e){
+		//其他的错误
+		std::cout << "ERROR:" << e.what() << std::endl;
+	}
+	return 0;
+}
+
 bool Game::start() {
 	//Start up SDL and create window
 	if (!init())
@@ -52,7 +69,10 @@ bool Game::start() {
 	else
 	{
 		initGameEnv();
-		mLoadingThread = SDL_CreateThread(loading, "Test", this);
+		mDrawThread = SDL_CreateThread(draw, "drawThread", this);
+		SDL_DetachThread(mDrawThread);
+
+		mLoadingThread = SDL_CreateThread(loading, "loadingThread", this);
 		SDL_DetachThread(mLoadingThread);
 		update();
 	}
@@ -107,11 +127,11 @@ void Game::update() {
 		{
 			if(!mNeedLoading){
 				//Handle events on queue
-				quit = mGameStage->handleEvent(&e);
-				mGameStage->draw();
+				mQuit = mGameStage->handleEvent(&e);
+				//mGameStage->draw();
 			}else{
-				quit = mLoadingPage->handleEvent(&e);
-				mLoadingPage->draw();
+				mQuit = mLoadingPage->handleEvent(&e);
+				//mLoadingPage->draw();
 			}
 		}
 		catch(std::exception& e)

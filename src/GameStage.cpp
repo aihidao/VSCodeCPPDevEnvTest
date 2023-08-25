@@ -3,8 +3,8 @@
 #include "MapGenerator.h"
 #include <cmath>
 #include "GridCoordinateConverterUtils.h"
-int GameStage::STAGE_POSITION_X = 0;
-int GameStage::STAGE_POSITION_Y = 0;
+int GameStage::STAGE_POSITION_X = 1000;
+int GameStage::STAGE_POSITION_Y = 1000;
 double GameStage::GAME_MAP_SCALE = 1;
 int GameStage::STAGE_SHOW_LOCAL_X = 0;
 int GameStage::STAGE_SHOW_LOCAL_Y = 0;
@@ -107,7 +107,6 @@ void GameStage::getShowGridInfo(){
 }
 
 bool GameStage::handleEvent(SDL_Event* e){
-	calculateFps();
 	bool quit = false;
 	while(SDL_PollEvent(e) != 0){
 		if (e->type == SDL_QUIT) {
@@ -221,6 +220,7 @@ void GameStage::mouseUp(SDL_Event* e) {
 }
 
 void GameStage::draw(){
+	calculateFps();
 	//SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 0xFF);
 	SDL_SetRenderDrawColor(mRenderer, 128, 128, 128, 0xFF);
 	//Clear screen
@@ -239,7 +239,10 @@ void GameStage::draw(){
 	// }
 	//mCellChunkArray[0]->draw();
 	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
-		mCellChunkArray[i]->draw();
+		if(!mCellChunkArray[i]->draw()){
+			//如果没有绘制说明在创建元素，则直接让出绘制防止画面卡住
+			break;
+		}
 	}
 	mDebugInfoBox->draw();
 

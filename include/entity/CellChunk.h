@@ -25,7 +25,7 @@ class CellChunk{
         int getStartGridY();
         int getWidth();
         int getHeight();
-        void draw();
+        bool draw();
         SDL_Texture* createTexture();
         void updateTexture();
         ~CellChunk();

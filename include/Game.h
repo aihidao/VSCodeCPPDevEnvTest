@@ -23,6 +23,10 @@ public:
     static int CHUNK_SIZE_HEIGHT;
 
     static volatile int initProgress;
+    bool mNeedLoading = true;
+    bool mQuit = false;
+    GameStage* mGameStage = NULL;
+    LoadingPage* mLoadingPage = NULL;
 private:
     //The window we'll be rendering to
     SDL_Window* mWindow = NULL;
@@ -33,13 +37,8 @@ private:
 
     //TextRender
     //TextRender* mTextRender = NULL;
-
-    bool mNeedLoading = true;
-    LoadingPage* mLoadingPage = NULL;
     SDL_Thread* mLoadingThread = NULL;
-
-    GameStage* mGameStage = NULL;
-
+    SDL_Thread* mDrawThread = NULL;
 public:
 
     Game();

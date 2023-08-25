@@ -35,9 +35,11 @@ int CellChunk::getHeight(){
     return this->mHeight;
 }
 
-void CellChunk::draw(){
+bool CellChunk::draw(){
     if(mChunkTexture == NULL){
+        //创建一个线程去创建这个Texture
         createTexture();
+        return false;
     }else{
         int posX = mStartGridX * Game::CHUNK_SIZE_WIDTH * Game::CELL_SIZE_WIDTH;
         int posY = mStartGridY * Game::CHUNK_SIZE_HEIGHT * Game::CELL_SIZE_HEIGHT;
@@ -54,6 +56,7 @@ void CellChunk::draw(){
         SDL_Rect dstRect = { static_cast<int>((GameStage::STAGE_POSITION_X + readPos.x + (point0.x - point3.x)) * GameStage::GAME_MAP_SCALE), static_cast<int>((GameStage::STAGE_POSITION_Y + readPos.y - this->mMaxAltitude) * GameStage::GAME_MAP_SCALE), static_cast<int>((point1.x - point3.x) * GameStage::GAME_MAP_SCALE), static_cast<int>((point2.y - point0.y + this->mMaxAltitude) * GameStage::GAME_MAP_SCALE)};
         //SDL_Rect dstRect = { (GameStage::STAGE_POSITION_X + readPos.x) * GameStage::GAME_MAP_SCALE, (GameStage::STAGE_POSITION_Y + readPos.y) * GameStage::GAME_MAP_SCALE, maxTextureWidth * GameStage::GAME_MAP_SCALE, maxTextureHeight * GameStage::GAME_MAP_SCALE};
         SDL_RenderCopy(mRenderer, mChunkTexture, &srcRect, &dstRect);
+        return true;
     }
 }
 
