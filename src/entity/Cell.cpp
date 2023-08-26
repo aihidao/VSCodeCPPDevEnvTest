@@ -61,58 +61,18 @@ void Cell::setAltitude(int altitude){
     mText->setStr(positionInfo);
 }
 
-void Cell::draw(){
+bool Cell::draw(){
     if(mCellTexture == NULL){
         //mCellTexture = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, Game::CELL_SIZE_WIDTH, Game::CELL_SIZE_HEIGHT);
         createCellTexture();
+        return false;
     }else{
-        // int gridX = mLocalX * Game::CELL_SIZE_WIDTH;
-        // int gridY = mLocalY * Game::CELL_SIZE_HEIGHT;
 
-        // SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({gridX, gridY});
-        // SDL_Point srcPos = getDrawPosition({0,0}, false);
-        // SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], true);
-        // SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], true);
-        // SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], true);
-        // SDL_Point bottomLeftPoint = getDrawPosition(Cell::OUTTER_RECT[3], true);
-        // int terrainWidht = topRightPoint.x - bottomLeftPoint.x;
-        // int terrainHeight = bottomRightPoint.y - topLeftPoint.y  + getGroudAltitude();
-
-        // SDL_Rect srcRect = { 0, 0, terrainWidht, terrainHeight};
-        // SDL_Rect dstRect = {(GameStage::STAGE_POSITION_X + readPos.x) * GameStage::GAME_MAP_SCALE , (GameStage::STAGE_POSITION_Y + readPos.y - mAltitude) * GameStage::GAME_MAP_SCALE , terrainWidht * GameStage::GAME_MAP_SCALE , terrainHeight * GameStage::GAME_MAP_SCALE };
-        // SDL_RenderCopy(mRenderer, mCellTexture, &srcRect, &dstRect);
     }
-    // if(mAltitude > 0){
-    //     drawTerrainTypeA();
-    // }else{
-    //     drawTerrainTypeB();
-    // }
-
-    //drawTerrain();
-    // if(mAltitude > 0){
-    //     SDL_Point linePoints[] = { 
-    //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[0]),
-    //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[1]),
-    //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[2]),
-    //         getDrawPositioniByCellRelativePosition(Cell::OUTTER_RECT[3]),
-    //     };
-
-    //     SDL_SetRenderDrawColor(mRenderer, 142, 64, 54, 64);
-    //     //SDL_RenderDrawLines(mRenderer, linePoints, 3);
-    //     //SDL_RenderDrawLine(mRenderer,);
-    //     if(upCell == NULL || mAltitude > upCell->mAltitude){
-    //         SDL_RenderDrawLine(mRenderer, linePoints[0].x, linePoints[0].y, linePoints[1].x, linePoints[1].y);
-    //     }
-
-    //     if(leftCell == NULL || mAltitude > leftCell->mAltitude){
-    //         SDL_RenderDrawLine(mRenderer, linePoints[0].x, linePoints[0].y, linePoints[3].x, linePoints[3].y);
-    //     }
-
-    // }
-
+    return true;
 }
 
-SDL_Texture* Cell::createCellTexture(){
+bool Cell::createCellTexture(){
     SDL_Point topLeftPoint = getDrawPosition(Cell::OUTTER_RECT[0], false);
     SDL_Point topRightPoint = getDrawPosition(Cell::OUTTER_RECT[1], false);
     SDL_Point bottomRightPoint = getDrawPosition(Cell::OUTTER_RECT[2], false);
@@ -131,6 +91,8 @@ SDL_Texture* Cell::createCellTexture(){
     
     // 清除渲染目标
     SDL_SetRenderTarget(mRenderer, NULL);
+    mTextureCreated = true;
+    return mTextureCreated;
 }
 
 SDL_Texture* Cell::getTexture(){

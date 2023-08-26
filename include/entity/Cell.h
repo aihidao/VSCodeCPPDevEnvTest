@@ -24,12 +24,13 @@ class Cell{
         SDL_Renderer* mRenderer = NULL;
         TextRender *mTextRender = NULL;
         SDL_Texture* mCellTexture = NULL;
+        bool mTextureCreated = false;
     public:
         Cell();
         Cell(SDL_Renderer* renderer,TextRender *textRender,int x,int y,int type);
         void setAltitude(int mAltitude);
-        void draw();
-        SDL_Texture* createCellTexture();
+        bool draw();
+        bool createCellTexture();
         void updateTexture();
         SDL_Texture* getTexture();
         void drawTerrain();

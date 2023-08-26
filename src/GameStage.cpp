@@ -238,9 +238,13 @@ void GameStage::draw(){
 	// 	}
 	// }
 	//mCellChunkArray[0]->draw();
+	int createCount = 0;
 	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
 		if(!mCellChunkArray[i]->draw()){
-			//如果没有绘制说明在创建元素，则直接让出绘制防止画面卡住
+			createCount++;
+		}
+
+		if(createCount > 5){
 			break;
 		}
 	}

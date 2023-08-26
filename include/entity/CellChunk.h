@@ -19,6 +19,7 @@ class CellChunk{
 
         SDL_Renderer *mRenderer = NULL;
         SDL_Texture* mChunkTexture = NULL;
+        bool mTextureCreated = false;
     public:
         CellChunk(SDL_Renderer* renderer, int startGridX, int startGridY, int width, int height, Cell** cellArray);
         int getStartGridX();
@@ -26,8 +27,8 @@ class CellChunk{
         int getWidth();
         int getHeight();
         bool draw();
-        SDL_Texture* createTexture();
-        void updateTexture();
+        bool createTexture();
+        bool updateTexture();
         ~CellChunk();
 };
 #endif
