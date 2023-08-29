@@ -3,8 +3,8 @@
 #include "MapGenerator.h"
 #include <cmath>
 #include "GridCoordinateConverterUtils.h"
-int GameStage::STAGE_POSITION_X = 1000;
-int GameStage::STAGE_POSITION_Y = 1000;
+int GameStage::STAGE_POSITION_X = 0;
+int GameStage::STAGE_POSITION_Y = 0;
 double GameStage::GAME_MAP_SCALE = 1;
 int GameStage::STAGE_SHOW_LOCAL_X = 0;
 int GameStage::STAGE_SHOW_LOCAL_Y = 0;
@@ -124,11 +124,13 @@ bool GameStage::handleEvent(SDL_Event* e){
 			std::string stageShowInfo = "Stage Show:(" + std::to_string(GameStage::TOP_LEFT_CELL_GRID_X) + "," + std::to_string(GameStage::TOP_LEFT_CELL_GRID_Y) + ") <-> (" + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_X) + "," + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_Y) + ")" ;
 			mStageShow->setStr(stageShowInfo);
 
+			//int worldX = mMouseX + GameStage::STAGE_POSITION_X;
+			//int worldY = mMouseY + GameStage::STAGE_POSITION_Y;
 			SDL_Point realPos = GridCoordinateConverterUtils::convertToReal({mMouseX, mMouseY});
-			int posX = realPos.x / Game::CELL_SIZE_WIDTH;
-			int posY = realPos.y / Game::CELL_SIZE_HEIGHT;
+			// int posX = realPos.x / Game::CELL_SIZE_WIDTH;
+			// int posY = realPos.y / Game::CELL_SIZE_HEIGHT;
 
-			std::string mouseSelectInfo = "Mouse Select Pos :(" + std::to_string(posX) + "," + std::to_string(posY) + ")";
+			std::string mouseSelectInfo = "Mouse world Pos :(" + std::to_string(realPos.x) + "," + std::to_string(realPos.y) + ")";
 			mMouseSelectPos->setStr(mouseSelectInfo);
 
 			mouseMove(e);
@@ -240,6 +242,11 @@ void GameStage::draw(){
 	//mCellChunkArray[0]->draw();
 	int createCount = 0;
 	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
+		// if(i == 0){
+		// 	//break;
+		// }else{
+		// 	break;
+		// }
 		if(!mCellChunkArray[i]->draw()){
 			createCount++;
 		}

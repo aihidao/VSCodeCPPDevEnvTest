@@ -14,6 +14,7 @@ class CellChunk{
         int mWidth;
         int mHeight;
         int mMaxAltitude = 0;
+        int mDrawMinY = 0;
 
         Cell** mCellArray = NULL;
 

@@ -354,6 +354,7 @@ void Cell::drawCellInfo(){
 }
 
 int Cell::getGroudAltitude(){
+    //return 0;
     return mAltitude > 0 ? mAltitude : 0;
 }
 
