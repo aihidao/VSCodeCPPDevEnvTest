@@ -50,7 +50,7 @@ class GameStage{
     public:
         GameStage(SDL_Renderer* renderer);
         void initGrid();
-        void getShowGridInfo();
+        //void getShowGridInfo();
         bool handleEvent(SDL_Event* e);
         void calculateFps();
         void mouseDown(SDL_Event *e);

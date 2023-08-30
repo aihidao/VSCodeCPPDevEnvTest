@@ -94,7 +94,7 @@ bool Game::calculateGameDate()
 {
 	bool success = true;
 	mGameStage->initGrid();
-	mGameStage->getShowGridInfo();
+	//mGameStage->getShowGridInfo();
 	mNeedLoading = false;
 	//SDL_Threa(mLoadingThread);	
 	return success;

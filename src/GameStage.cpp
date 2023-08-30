@@ -85,26 +85,26 @@ void GameStage::initGrid(){
 	}
 }
 
-void GameStage::getShowGridInfo(){
-	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({static_cast<int>( (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE),static_cast<int>((- 300) / GameStage::GAME_MAP_SCALE)});
-	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ static_cast<int>((Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE), static_cast<int>((Game::SCREEN_HEIGHT  + 300) / GameStage::GAME_MAP_SCALE)});
+// void GameStage::getShowGridInfo(){
+// 	SDL_Point realTopLeft = GridCoordinateConverterUtils::convertToReal({static_cast<int>( (Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE),static_cast<int>((- 300) / GameStage::GAME_MAP_SCALE)});
+// 	SDL_Point realBottomRight = GridCoordinateConverterUtils::convertToReal({ static_cast<int>((Game::SCREEN_WIDTH / 2) / GameStage::GAME_MAP_SCALE), static_cast<int>((Game::SCREEN_HEIGHT  + 300) / GameStage::GAME_MAP_SCALE)});
 
-	GameStage::TOP_LEFT_CELL_GRID_X = realTopLeft.x / Game::CELL_SIZE_WIDTH;
-	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X >= 0 ? GameStage::TOP_LEFT_CELL_GRID_X : 0;
-	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X < Game::MAP_WIDTH ? GameStage::TOP_LEFT_CELL_GRID_X : Game::MAP_WIDTH;
+// 	GameStage::TOP_LEFT_CELL_GRID_X = realTopLeft.x / Game::CELL_SIZE_WIDTH;
+// 	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X >= 0 ? GameStage::TOP_LEFT_CELL_GRID_X : 0;
+// 	GameStage::TOP_LEFT_CELL_GRID_X = GameStage::TOP_LEFT_CELL_GRID_X < Game::MAP_WIDTH ? GameStage::TOP_LEFT_CELL_GRID_X : Game::MAP_WIDTH;
 
-	GameStage::TOP_LEFT_CELL_GRID_Y = realTopLeft.y / Game::CELL_SIZE_HEIGHT;
-	GameStage::TOP_LEFT_CELL_GRID_Y = GameStage::TOP_LEFT_CELL_GRID_Y >= 0 ? GameStage::TOP_LEFT_CELL_GRID_Y : 0;
-	GameStage::TOP_LEFT_CELL_GRID_Y = GameStage::TOP_LEFT_CELL_GRID_Y < Game::MAP_HEIGHT ? GameStage::TOP_LEFT_CELL_GRID_Y : Game::MAP_HEIGHT;
+// 	GameStage::TOP_LEFT_CELL_GRID_Y = realTopLeft.y / Game::CELL_SIZE_HEIGHT;
+// 	GameStage::TOP_LEFT_CELL_GRID_Y = GameStage::TOP_LEFT_CELL_GRID_Y >= 0 ? GameStage::TOP_LEFT_CELL_GRID_Y : 0;
+// 	GameStage::TOP_LEFT_CELL_GRID_Y = GameStage::TOP_LEFT_CELL_GRID_Y < Game::MAP_HEIGHT ? GameStage::TOP_LEFT_CELL_GRID_Y : Game::MAP_HEIGHT;
 
-	GameStage::BOTTOM_RIGHT_CELL_GRID_X = realBottomRight.x / Game::CELL_SIZE_WIDTH;
-	GameStage::BOTTOM_RIGHT_CELL_GRID_X = GameStage::BOTTOM_RIGHT_CELL_GRID_X >= 0 ? GameStage::BOTTOM_RIGHT_CELL_GRID_X : 0;
-	GameStage::BOTTOM_RIGHT_CELL_GRID_X = GameStage::BOTTOM_RIGHT_CELL_GRID_X < Game::MAP_WIDTH ? GameStage::BOTTOM_RIGHT_CELL_GRID_X : Game::MAP_WIDTH;
+// 	GameStage::BOTTOM_RIGHT_CELL_GRID_X = realBottomRight.x / Game::CELL_SIZE_WIDTH;
+// 	GameStage::BOTTOM_RIGHT_CELL_GRID_X = GameStage::BOTTOM_RIGHT_CELL_GRID_X >= 0 ? GameStage::BOTTOM_RIGHT_CELL_GRID_X : 0;
+// 	GameStage::BOTTOM_RIGHT_CELL_GRID_X = GameStage::BOTTOM_RIGHT_CELL_GRID_X < Game::MAP_WIDTH ? GameStage::BOTTOM_RIGHT_CELL_GRID_X : Game::MAP_WIDTH;
 
-	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = realBottomRight.y / Game::CELL_SIZE_HEIGHT;
-	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = GameStage::BOTTOM_RIGHT_CELL_GRID_Y >= 0 ? GameStage::BOTTOM_RIGHT_CELL_GRID_Y : 0;
-	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = GameStage::BOTTOM_RIGHT_CELL_GRID_Y < Game::MAP_HEIGHT ? GameStage::BOTTOM_RIGHT_CELL_GRID_Y : Game::MAP_HEIGHT;
-}
+// 	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = realBottomRight.y / Game::CELL_SIZE_HEIGHT;
+// 	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = GameStage::BOTTOM_RIGHT_CELL_GRID_Y >= 0 ? GameStage::BOTTOM_RIGHT_CELL_GRID_Y : 0;
+// 	GameStage::BOTTOM_RIGHT_CELL_GRID_Y = GameStage::BOTTOM_RIGHT_CELL_GRID_Y < Game::MAP_HEIGHT ? GameStage::BOTTOM_RIGHT_CELL_GRID_Y : Game::MAP_HEIGHT;
+// }
 
 bool GameStage::handleEvent(SDL_Event* e){
 	bool quit = false;
@@ -172,7 +172,7 @@ bool GameStage::handleEvent(SDL_Event* e){
 				GameStage::STAGE_POSITION_Y -= std::round(((GameStage::GAME_MAP_SCALE/oldScale - 1) * (mouseY))) / GameStage::GAME_MAP_SCALE;
 			}
 
-			getShowGridInfo();
+			//getShowGridInfo();
 		}else{
 			
 		}
@@ -207,7 +207,7 @@ void GameStage::mouseMove(SDL_Event* e) {
 		GameStage::STAGE_POSITION_X += e->motion.xrel / GameStage::GAME_MAP_SCALE;
 		GameStage::STAGE_POSITION_Y += e->motion.yrel / GameStage::GAME_MAP_SCALE;
 
-		getShowGridInfo();
+		//getShowGridInfo();
 	}
 }
 

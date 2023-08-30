@@ -67,7 +67,7 @@ bool CellChunk::draw(){
         int terrainWidth = topRightPoint.x - bottomLeftPoint.x;
 
         SDL_Rect srcRect = { 0, 0, point1.x - point3.x, point2.y - point0.y  + this->mMaxAltitude};
-        SDL_Rect dstRect = { static_cast<int>((GameStage::STAGE_POSITION_X + readPos.x - (point0.x - point3.x - terrainWidth / 2)) * GameStage::GAME_MAP_SCALE), static_cast<int>((GameStage::STAGE_POSITION_Y + readPos.y + this->mDrawMinY) * GameStage::GAME_MAP_SCALE), static_cast<int>((point1.x - point3.x) * GameStage::GAME_MAP_SCALE), static_cast<int>((point2.y - point0.y - this->mDrawMinY) * GameStage::GAME_MAP_SCALE)};
+        SDL_Rect dstRect = { static_cast<int>((GameStage::STAGE_POSITION_X + readPos.x - (point0.x - point3.x)) * GameStage::GAME_MAP_SCALE), static_cast<int>((GameStage::STAGE_POSITION_Y + readPos.y + this->mDrawMinY) * GameStage::GAME_MAP_SCALE), static_cast<int>((point1.x - point3.x) * GameStage::GAME_MAP_SCALE), static_cast<int>((point2.y - point0.y - this->mDrawMinY) * GameStage::GAME_MAP_SCALE)};
         //SDL_Rect dstRect = { (GameStage::STAGE_POSITION_X + readPos.x) * GameStage::GAME_MAP_SCALE, (GameStage::STAGE_POSITION_Y + readPos.y) * GameStage::GAME_MAP_SCALE, maxTextureWidth * GameStage::GAME_MAP_SCALE, maxTextureHeight * GameStage::GAME_MAP_SCALE};
         SDL_RenderCopy(mRenderer, mChunkTexture, &srcRect, &dstRect);
     }
