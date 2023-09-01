@@ -364,19 +364,24 @@ SDL_Color Cell::getGroudColor(){
     //大地的颜色
     groudColor = {185, 122, 87, 255};
     if (altitude > 0) {
-        int altitudeLevel = std::round(altitude / 10);
+        int altitudeLevel = altitude;
+        double rat = altitudeLevel / 500.0;
+        if(rat > 1.0){
+            rat = 1.0;
+        }
         // 颜色根据 altitude 大小变化，值越大越绿
         // 计算红色分量
-        Uint8 r = static_cast<Uint8>((altitudeLevel / 10.0) * 200);
+        Uint8 r = static_cast<Uint8>(rat * 200);
+        
         // 计算绿色分量（固定为 200）
         Uint8 g = 200;
         // 计算蓝色分量
-        Uint8 b = static_cast<Uint8>((altitudeLevel / 10.0) * 200);
+        Uint8 b = static_cast<Uint8>(rat * 200);
 
         groudColor = {r, g, b, 255}; // 设置颜色并设置 alpha 值为 255（完全不透明）
     } else {
         altitude = -altitude;
-        int altitudeLevel = std::round(altitude / 10);
+        int altitudeLevel = std::round(altitude / 100);
         // 计算蓝色分量
         Uint8 r = static_cast<Uint8>(((10 - altitudeLevel) / 10.0) * 180);
         // 计算绿色分量
