@@ -41,7 +41,7 @@ void GameStage::initGrid(){
 		int gridX = i % Game::MAP_WIDTH;
 		int gridY = i / Game::MAP_WIDTH;
 		int altitude = mapGenerator.mAltitudeMap[i];
-		mCellArray[i] = new Cell(mRenderer,mTextRender, gridX, gridY,0);
+		mCellArray[i] = new Cell(mRenderer, mTextRender, gridX, gridY,0);
 
 		// Linked Cell
 		if(gridX > 0){
@@ -69,7 +69,7 @@ void GameStage::initGrid(){
 			int chunkSizeWidth = i * Game::CHUNK_SIZE_WIDTH + Game::CHUNK_SIZE_WIDTH > Game::MAP_WIDTH ? Game::MAP_WIDTH - i * Game::CHUNK_SIZE_WIDTH : Game::CHUNK_SIZE_WIDTH;
 			int chunkSizeHeight = j * Game::CHUNK_SIZE_HEIGHT + Game::CHUNK_SIZE_HEIGHT > Game::MAP_HEIGHT ? Game::MAP_HEIGHT - j * Game::CHUNK_SIZE_HEIGHT : Game::CHUNK_SIZE_HEIGHT;
 			int index = j * mCellChunkArrayWidth + i;
-			mCellChunkArray[index] = new CellChunk(mRenderer, i, j, chunkSizeWidth, chunkSizeHeight, mCellArray);
+			mCellChunkArray[index] = new CellChunk(mRenderer, mTextRender, i, j, chunkSizeWidth, chunkSizeHeight, mCellArray);
 		
 			//Linked Cell
 			if(i > 0){
@@ -123,13 +123,7 @@ bool GameStage::handleEvent(SDL_Event* e){
 			mStagePosition->setStr(stagePosInfo);
 			std::string stageShowInfo = "Stage Show:(" + std::to_string(GameStage::TOP_LEFT_CELL_GRID_X) + "," + std::to_string(GameStage::TOP_LEFT_CELL_GRID_Y) + ") <-> (" + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_X) + "," + std::to_string(GameStage::BOTTOM_RIGHT_CELL_GRID_Y) + ")" ;
 			mStageShow->setStr(stageShowInfo);
-
-			//int worldX = mMouseX + GameStage::STAGE_POSITION_X;
-			//int worldY = mMouseY + GameStage::STAGE_POSITION_Y;
 			SDL_Point realPos = GridCoordinateConverterUtils::convertToReal({mMouseX, mMouseY});
-			// int posX = realPos.x / Game::CELL_SIZE_WIDTH;
-			// int posY = realPos.y / Game::CELL_SIZE_HEIGHT;
-
 			std::string mouseSelectInfo = "Mouse world Pos :(" + std::to_string(realPos.x) + "," + std::to_string(realPos.y) + ")";
 			mMouseSelectPos->setStr(mouseSelectInfo);
 
@@ -254,7 +248,24 @@ void GameStage::draw(){
 		if(createCount > 5){
 			break;
 		}
+
 	}
+	for(int i = 0; i < mCellChunkArrayWidth * mCellChunkArrayHeight; i++){
+		// if(i == 0){
+		// 	//break;
+		// }else{
+		// 	break;
+		// }
+		// if(!mCellChunkArray[i]->draw()){
+		// 	createCount++;
+		// }
+
+		// if(createCount > 5){
+		// 	break;
+		// }
+		mCellChunkArray[i]->drawDebugInfo();
+	}
+
 	mDebugInfoBox->draw();
 
 	SDL_RenderPresent(mRenderer);

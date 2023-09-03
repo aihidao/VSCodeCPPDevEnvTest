@@ -2,13 +2,18 @@
 #include "Game.h"
 #include "GridCoordinateConverterUtils.h"
 #include "iostream"
-CellChunk::CellChunk(SDL_Renderer* renderer, int startGridX, int startGridY, int width, int height, Cell** cellArray){
+CellChunk::CellChunk(SDL_Renderer* renderer, TextRender *textRender, int startGridX, int startGridY, int width, int height, Cell** cellArray){
     this->mRenderer = renderer;
     this->mStartGridX = startGridX;
     this->mStartGridY = startGridY;
     this->mWidth = width;
     this->mHeight = height;
     this->mCellArray = cellArray;
+    mTextRender = textRender;
+    std::string positionInfo = "( " + std::to_string(startGridX) + "," + std::to_string(startGridY) + " )";
+    //printf("init info:%s\n",positionInfo.c_str());
+    mDebugInfo = new Text(positionInfo.c_str());
+
     //计算出最高的块，
     for(int i = 0; i < this->mWidth; i++){
         for(int j = 0; j < this->mHeight; j++){
@@ -16,9 +21,9 @@ CellChunk::CellChunk(SDL_Renderer* renderer, int startGridX, int startGridY, int
             if(mCellArray[index]->getGroudAltitude() > this->mMaxAltitude){
                 this->mMaxAltitude = mCellArray[index]->getGroudAltitude();
                 SDL_Point pointTmp = GridCoordinateConverterUtils::convertToDraw({ i * Game::CELL_SIZE_WIDTH, j * Game::CELL_SIZE_HEIGHT});
-                if(this->mDrawMinY >  pointTmp.y - mCellArray[index]->getGroudAltitude()){
-                    this->mDrawMinY = pointTmp.y - mCellArray[index]->getGroudAltitude();
-                }
+                // if(this->mDrawMinY >  pointTmp.y - mCellArray[index]->getGroudAltitude()){
+                //     this->mDrawMinY = pointTmp.y - mCellArray[index]->getGroudAltitude();
+                // }
             }
         }
     }
@@ -129,7 +134,6 @@ bool CellChunk::updateTexture(){
                     int terrainWidth = topRightPoint.x - bottomLeftPoint.x;
                     int terrainHeight = bottomRightPoint.y - topLeftPoint.y  + mCellArray[index]->getGroudAltitude();
 
-
                     SDL_Rect srcRect = { 0, 0, terrainWidth, terrainHeight};
                     //SDL_Rect dstRect = {(readPos.x + (point0.x - point3.x - terrainWidth / 2)) , (readPos.y - this->mMaxAltitude - mCellArray[index]->getGroudAltitude()), terrainWidth , terrainHeight};
                     SDL_Rect dstRect = {(readPos.x + (point0.x - point3.x - terrainWidth / 2)) , (readPos.y - this->mDrawMinY - mCellArray[index]->getGroudAltitude()), terrainWidth , terrainHeight};
@@ -146,47 +150,62 @@ bool CellChunk::updateTexture(){
         }
     }
 
-    int textureWidth = point1.x - point3.x;
-    int textureHeight = point2.y - point0.y  - this->mDrawMinY;
-    SDL_SetRenderTarget(mRenderer, mChunkTexture);
-    SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
-    SDL_RenderDrawLine(mRenderer, 0, 0, textureWidth, 0);
-    SDL_RenderDrawLine(mRenderer, 0, 1, textureWidth, 1);
-    SDL_RenderDrawLine(mRenderer, 0, 2, textureWidth, 2);
-    SDL_RenderDrawLine(mRenderer, 0, 3, textureWidth, 3);
-    SDL_RenderDrawLine(mRenderer, 0, 4, textureWidth, 4);
-
-    SDL_RenderDrawLine(mRenderer, 0, 0, 0, textureHeight);
-    SDL_RenderDrawLine(mRenderer, 1, 0, 1, textureHeight);
-    SDL_RenderDrawLine(mRenderer, 2, 0, 2, textureHeight);
-    SDL_RenderDrawLine(mRenderer, 3, 0, 3, textureHeight);
-    SDL_RenderDrawLine(mRenderer, 4, 0, 4, textureHeight);
-
-    SDL_RenderDrawLine(mRenderer, textureWidth, 0, textureWidth, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 1, 0, textureWidth - 1, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 2, 0, textureWidth - 2, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 3, 0, textureWidth - 3, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 4, 0, textureWidth - 4, textureHeight);
-
-    SDL_RenderDrawLine(mRenderer, textureWidth - 5, 0, textureWidth - 5, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 6, 0, textureWidth - 6, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 7, 0, textureWidth - 7, textureHeight);
-    SDL_RenderDrawLine(mRenderer, textureWidth - 8, 0, textureWidth - 8, textureHeight);
-
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight, textureWidth, textureHeight);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 1, textureWidth, textureHeight - 1);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 2, textureWidth, textureHeight - 2);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 3, textureWidth, textureHeight - 3);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 4, textureWidth, textureHeight - 4);
-
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 5, textureWidth, textureHeight - 5);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 6, textureWidth, textureHeight - 6);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 7, textureWidth, textureHeight - 7);
-    SDL_RenderDrawLine(mRenderer, 0, textureHeight - 8, textureWidth, textureHeight - 8);
-
     if(createCount == 0){
         return true;
     }else{
         return false;
+    }
+}
+
+bool CellChunk::drawDebugInfo(){
+    int posX = mStartGridX * Game::CHUNK_SIZE_WIDTH * Game::CELL_SIZE_WIDTH;
+    int posY = mStartGridY * Game::CHUNK_SIZE_HEIGHT * Game::CELL_SIZE_HEIGHT;
+    SDL_Point readPos = GridCoordinateConverterUtils::convertToDraw({posX, posY});
+
+
+    int maxTextureWidth = this->mWidth * Game::CELL_SIZE_WIDTH;
+    int maxTextureHeight = this->mHeight * Game::CELL_SIZE_HEIGHT;
+    SDL_Point point0 = GridCoordinateConverterUtils::convertToDraw({0, 0});
+    SDL_Point point1 = GridCoordinateConverterUtils::convertToDraw({maxTextureWidth, 0});
+    SDL_Point point2 = GridCoordinateConverterUtils::convertToDraw({maxTextureWidth, maxTextureHeight});
+    SDL_Point point3 = GridCoordinateConverterUtils::convertToDraw({0, maxTextureHeight});
+
+    SDL_Point topLeftPoint = mCellArray[0]->getDrawPosition(Cell::OUTTER_RECT[0], true);
+    SDL_Point topRightPoint = mCellArray[0]->getDrawPosition(Cell::OUTTER_RECT[1], true);
+    SDL_Point bottomRightPoint = mCellArray[0]->getDrawPosition(Cell::OUTTER_RECT[2], true);
+    SDL_Point bottomLeftPoint = mCellArray[0]->getDrawPosition(Cell::OUTTER_RECT[3], true);
+
+    int textureWidth = point1.x - point3.x;
+    int textureHeight = point2.y - point0.y  - this->mDrawMinY;
+    SDL_Rect dstRect = { static_cast<int>((GameStage::STAGE_POSITION_X + readPos.x - (point0.x - point3.x)) * GameStage::GAME_MAP_SCALE), static_cast<int>((GameStage::STAGE_POSITION_Y + readPos.y + this->mDrawMinY) * GameStage::GAME_MAP_SCALE), static_cast<int>((point1.x - point3.x) * GameStage::GAME_MAP_SCALE), static_cast<int>((point2.y - point0.y - this->mDrawMinY) * GameStage::GAME_MAP_SCALE)};
+
+    int startX = dstRect.x;
+    int startY = dstRect.y;
+    int width = dstRect.w;
+    int height = dstRect.h;
+    SDL_SetRenderTarget(mRenderer, NULL);
+    SDL_SetRenderDrawColor(mRenderer, 255, 0, 0, 255);
+    SDL_RenderDrawLine(mRenderer, startX, startY, startX + width, startY);
+    SDL_RenderDrawLine(mRenderer, startX, startY + 1, startX + width, startY + 1);
+
+    SDL_RenderDrawLine(mRenderer, startX, startY, startX, startY + height);
+    SDL_RenderDrawLine(mRenderer, startX + 1, startY, startX + 1, startY + height);
+
+    SDL_SetRenderDrawColor(mRenderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(mRenderer, startX + width, startY, startX + width, startY + height);
+    SDL_RenderDrawLine(mRenderer, startX, startY + height, startX + width, startY + height);
+
+
+    mTextRender->drawText(mDebugInfo,startX + 10, startY + mDebugInfo->getRect().h,TextRender::RENDER_TYPE_NOMAL);
+}
+
+CellChunk::~CellChunk(){
+    if(mChunkTexture != NULL){
+        SDL_DestroyTexture(mChunkTexture);
+        mChunkTexture = NULL;
+    }
+    if(mDebugInfo != NULL){
+        delete mDebugInfo;
+        mDebugInfo = NULL;
     }
 }

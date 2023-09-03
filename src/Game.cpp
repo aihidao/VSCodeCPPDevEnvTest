@@ -21,8 +21,8 @@ int	Game::MAP_HEIGHT = 300;
 int	Game::CELL_SIZE_WIDTH = 50;
 int	Game::CELL_SIZE_HEIGHT = 50;
 
-int	Game::CHUNK_SIZE_WIDTH = 40;
-int	Game::CHUNK_SIZE_HEIGHT = 70;
+int	Game::CHUNK_SIZE_WIDTH = 20;
+int	Game::CHUNK_SIZE_HEIGHT = 20;
 
 volatile int Game::initProgress = 0;
 Game::Game(){
